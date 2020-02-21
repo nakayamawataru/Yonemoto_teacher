@@ -1,0 +1,13 @@
+<% businesses.each do |business| %>
+  <% total_day_top_rank = business.day_top_rank_in_month(@labels, Business::COUNT_RANK)%>
+  <tr class="list-business">
+    <td class="text-center"><%= link_to business.name, edit_business_path(business) %></td>
+    <td class="text-center"><%= total_day_top_rank %></td>
+    <td class="text-center"><%= convert_status(business.status) %></td>
+    <td class="text-center"><%= number_to_currency(business.daily_unit_price, :format => "%u%n", :unit => "￥") %></td>
+    <td class="text-center"><%= number_to_currency(business.daily_unit_price * total_day_top_rank, :format => "%u%n", :unit => "￥") %></td>
+    <td class="text-center"><%= number_to_currency(business.profit_amount * total_day_top_rank, :format => "%u%n", :unit => "￥") %></td>
+    <td class="text-center"><%= number_to_currency(business.performance_month_fee.to_i, :format => "%u%n", :unit => "￥") %></td>
+    <td class="text-center"><%= number_to_currency(business.monthly_profit_amount, :format => "%u%n", :unit => "￥") %></td>
+  </tr>
+<% end %>

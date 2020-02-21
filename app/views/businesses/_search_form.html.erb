@@ -1,0 +1,20 @@
+<%= search_form_for @search, url: businesses_path, html: { method: :get } do |f| %>
+  <div class="col-md-12">
+    <% unless current_user.is_user? %>
+      <div class="form-group col-md-6 col-xs-12">
+        <label class="control-label">ユーザー名</label>
+        <%= f.select :user_id_eq, options_from_collection_for_select(User.accessible_by(current_ability), "id", "name", selected: @search.user_id_eq), { include_blank: "選択する" }, { class: "form-control select2" } %>
+      </div>
+    <% end %>
+
+    <div class="form-group col-md-<%= !current_user.is_user? ? 6 : 12 %> col-xs-12">
+      <label class="control-label">案件名</label>
+      <%= f.text_field :name_cont, class: 'form-control' %>
+    </div>
+
+    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+      <%= submit_tag "検索", class: 'btn btn-success' %>
+    </div>
+  </div>
+<% end %>
+<br>

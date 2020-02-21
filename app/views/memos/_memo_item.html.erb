@@ -1,0 +1,82 @@
+<% @memos.each do |memo| %>
+  <% items = MeoHistory.ranking_current_date(memo[0], @business) %>
+  <% if items.any? %>
+    <% items.each_with_index do |item, index| %>
+      <tr>
+        <% if index == 0 %>
+          <td class="text-center col-md-2" rowspan="<%= items.count + 1 %>"><%= memo[0] %></td>
+        <% end %>
+        <td class="text-center"><%= item[:ranking] %></td>
+        <td class="text-center">
+          <% if item[:compare_rank] < 0 %>
+            <span style="color: green;" class="glyphicon glyphicon-arrow-up"></span>
+            <%= item[:compare_rank].abs %>
+          <% elsif item[:compare_rank] > 0 %>
+            <span style="color: red;" class="glyphicon glyphicon-arrow-down"></span>
+            <%= item[:compare_rank].abs %>
+          <% else %>
+            <span style="color: #555;" class="glyphicon glyphicon-arrow-right"></span>
+          <% end %>
+        </td>
+        <td class="text-center"><%= item[:keyword] %></td>
+        <td class="text-center"><%= item[:base_location_japanese] %></td>
+        <% if index == 0 %>
+          <td rowspan="<%= items.count %>">
+            <%= link_to charts_path(business_id: @business.id, date_ranking: memo[0]) do %>
+              <%= @business.name %>
+              <button class="btn btn-success">
+                <i class="fa fa-line-chart"></i>
+              </button>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+
+    <tr>
+      <td class="text-center">メモ</td>
+      <td colspan="<%= items.count %>">
+        <div>
+          <% memo[1].each do |m| %>
+            <% if m.user == current_user %>
+              <p><%= "- #{m.title}" %></p>
+            <% else %>
+              <p><%= "- #{m.title} （#{m.user.company}）" %></p>
+            <% end %>
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  <% else %>
+    <tr>
+      <td class="text-center col-md-2" rowspan="2"><%= memo[0] %></td>
+      <td class="text-center">-</td>
+      <td class="text-center">-</td>
+      <td class="text-center">-</td>
+      <td class="text-center">-</td>
+      <td rowspan="2">
+        <%= link_to charts_path(business_id: @business.id, date_ranking: memo[0]) do %>
+          <%= @business.name %>
+          <button class="btn btn-success">
+            <i class="fa fa-line-chart"></i>
+          </button>
+        <% end %>
+      </td>
+    </tr>
+
+    <tr>
+      <td class="text-center">メモ</td>
+      <td colspan="3">
+        <div>
+          <% memo[1].each do |m| %>
+            <% if m.user == current_user %>
+              <p><%= "- #{m.title}" %></p>
+            <% else %>
+              <p><%= "- #{m.title} （#{m.user.name}）" %></p>
+            <% end %>
+          <% end %>
+        </div>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

@@ -1,0 +1,22 @@
+<% sms_reviews.each do |sms_review| %>
+  <tr class="sms-review">
+    <% status, slug = get_status_and_slug(sms_review, @coupon) %>
+    <td style="text-align:center;">
+      <% if status.blank? %>
+        <%= check_box_tag :sms_review_id, sms_review.id, false, id: "sms_review_#{sms_review.id}", class: "sms-checkbox" %>
+      <% end %>
+    </td>
+    <td class="username-review-id-<%= sms_review.id %>"><%= sms_review.username %></td>
+    <td class="phone-number-review-id-<%= sms_review.id %>"><%= sms_review.phone_number %></td>
+    <td><%= status %></td>
+    <td>
+      <% coupon_url =  sms_review.coupon_url(slug) %>
+      <% if coupon_url.present? %>
+        <a href="<%= coupon_url %>" target="_blank"><%= coupon_url %></a>
+      <% end %>
+    </td>
+    <td>
+      <button type="button" class="btn btn-success btn-edit-modal" data-toggle="modal" data-target="#modalSmsForm" data-sms-review-id="<%= sms_review.id %>">編集</button>
+    </td>
+  </tr>
+<% end %>

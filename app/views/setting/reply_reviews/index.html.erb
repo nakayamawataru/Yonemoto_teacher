@@ -1,0 +1,59 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/reply_reviews' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <%= render 'shared/setting_sidebar' %>
+    <div class="col-md-9 col-sm-9">
+      <div class="box">
+        <div class="box-header">
+          <b>口コミ自動返信設定</b>
+        </div>
+        <div class="box-body">
+          <%= form_tag setting_reply_reviews_path, { method: :get } do %>
+            <div class="form-group">
+              <label>案件名</label>
+              <%= select_tag :business_id, options_from_collection_for_select(Business.accessible_by(current_ability), "id", "name", @business.try(:id)),
+                include_blank: "選択する", class: "form-control", onchange: "this.form.submit();" %>
+            </div>
+          <% end %>
+          <br>
+          <% if @business.present? %>
+            <div class="panel panel-default">
+              <div class="panel-heading"><b>メッセージあり</b></div>
+              <div class="panel-body">
+                <form id="less-two-form">
+                  <%= render partial: 'form', locals: { title: '星２以下の返信文', review: @rv_less_2_stars,
+                    type_review: 'less_two_stars' } %>
+                </form>
+                <hr>
+                <form id="less-three-form">
+                  <%= render partial: 'form', locals: { title: '星３以上への返信文', review: @rv_greater_3_stars,
+                    type_review: 'greater_three_stars' } %>
+                </form>
+              </div>
+            </div>
+
+            <div class="panel panel-default">
+              <div class="panel-heading"><b>メッセージなし</b></div>
+              <div class="panel-body">
+                <form id="greater-two-nc-form">
+                  <%= render partial: 'form', locals: { title: '星２以下の返信文', review: @rv_less_2_stars_nc,
+                    type_review: 'less_two_stars_no_comment' } %>
+                </form>
+                <hr>
+                <form id="greater-three-nc-form">
+                  <%= render partial: 'form', locals: { title: '星３以上への返信文', review: @rv_greater_3_stars_nc,
+                    type_review: 'greater_three_stars_no_comment' } %>
+                </form>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="notification-save-content-review wrapper"></div>

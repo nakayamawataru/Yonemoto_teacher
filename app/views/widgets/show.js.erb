@@ -1,0 +1,2 @@
+$(".review-list").html("<%= j render('review', reviews: @reviews) %>");
+$("#pagination").html("<%= j paginate(@reviews, theme: 'twitter-bootstrap-3', remote: true, window: 0).to_s %>");

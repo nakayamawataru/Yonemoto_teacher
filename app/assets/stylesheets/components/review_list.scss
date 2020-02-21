@@ -1,0 +1,111 @@
+.review-list .review-meta {
+  border-bottom: 1px solid #eee
+}
+
+.review-list .review-meta .logo {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  float: left;
+  background-color: #fff
+}
+
+.review-list .review-meta .from-name {
+  float: left;
+  width: 130px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  overflow: hidden
+}
+
+@media (max-width:479px) {
+  .review-list .review-meta .from-name {
+    width: 80px
+  }
+}
+
+.review-list .review-meta .stars {
+  float: left;
+  width: 100px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px;
+  color: orange
+}
+
+@media (max-width:479px) {
+  .review-list .review-meta .stars {
+    width: 80px
+  }
+}
+
+.review-list .review-meta .score {
+  float: left;
+  width: 50px;
+  text-align: left;
+  height: 30px;
+  line-height: 30px;
+  font-weight: lighter
+}
+
+@media (max-width:479px) {
+  .review-list .review-meta .score {
+    width: 30px
+  }
+}
+
+.review-list .review-meta .date {
+  float: right;
+  width: 150px;
+  text-align: center;
+  height: 30px;
+  line-height: 30px
+}
+
+@media (max-width:479px) {
+  .review-list .review-meta .date {
+    width: 90px
+  }
+}
+
+.review-list .review-content {
+  font-size: 12px;
+  padding: 10px 10px;
+  border-bottom: 1px solid #eee
+}
+
+.review-list .review-content .review-content-footer {
+  height: 35px;
+  font-size: 10px;
+  margin-top: 3px
+}
+
+.review-list .review-content .review-content-footer .sender {
+  width: 40%;
+  float: left;
+  line-height: 35px;
+  font-size: 11px;
+  height: 35px;
+  overflow: hidden
+}
+
+.review-list .review-content .review-content-footer .sender .left {
+  width: 40px;
+  float: left
+}
+
+.review-list .review-content .review-content-footer .sender .sender-image {
+  width: 20px;
+  height: 20px;
+  margin-top: 7px;
+  background-size: cover;
+  background-position: center, center;
+  background-repeat: no-repeat;
+  float: left;
+  border-radius: 50%;
+  margin-right: 5px
+}

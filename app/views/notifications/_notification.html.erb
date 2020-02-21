@@ -1,0 +1,19 @@
+<tr style="word-break:break-all;">
+  <td class="text-center"><%= notification.id %></td>
+  <td><%= simple_format notification.content %></td>
+  <td class="text-center"><%= notification.delivery_time %></td>
+  <td><%= link_to notification.button_url, notification.button_url, target: '_blank' %></td>
+  <td>
+    <% if notification.user_role.present? %>
+      <%= notification.user_role.map{ |v| t "notifications.user_role.#{Notification::USER_ROLES.key(v.to_i)}"}.join(" / ") %>
+    <% end %>
+  </td>
+  <td class="text-center">
+    <%= link_to edit_notification_path(notification), class: "btn btn-success" do %>
+      <i class="fa fa-pencil"></i>
+    <% end %>
+    <%= link_to notification_path(notification), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-success" do %>
+      <i class="fa fa-trash"></i>
+    <% end %>
+  </td>
+</tr>

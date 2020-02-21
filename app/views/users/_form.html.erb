@@ -1,0 +1,24 @@
+<div class="nav-tabs-custom">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab_1" data-toggle="tab">基本情報</a></li>
+    <% if current_user.admin? && @user.is_agent? %>
+      <li><a href="#tab_2" data-toggle="tab">特別設定</a></li>
+    <% end %>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab_1">
+      <%= render 'general_information', f: f %>
+    </div>
+
+    <% if current_user.admin? && @user.is_agent? %>
+      <div class="tab-pane" id="tab_2">
+        <%= render 'setting', f: f %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div class="pull-right">
+  <%= link_to "キャンセル", users_path, class:  "btn btn-default" %>
+  <%= f.submit "保存", class: "btn btn-success"%>
+</div>

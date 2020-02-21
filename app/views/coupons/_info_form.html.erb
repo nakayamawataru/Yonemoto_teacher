@@ -1,0 +1,54 @@
+<div class="table table-responsive">
+  <table class="table table-bordered table-hover">
+    <tbody>
+      <tr role="row">
+        <th>案件名</th>
+        <td><%= @coupon.business.name %></td>
+      </tr>
+
+      <tr role="row">
+        <th>利用制限</th>
+        <td><%= @coupon.limit_num %></td>
+      </tr>
+
+      <tr role="row">
+        <th>有効期限</th>
+        <td><%= format_date_coupon(@coupon.expire_at) %></td>
+      </tr>
+
+      <tr role="row">
+        <th>説明</th>
+        <td><%= simple_format @coupon.description %></td>
+      </tr>
+
+      <tr role="row">
+        <th>SMSメッセージ</th>
+        <td><%= @coupon.message %></td>
+      </tr>
+
+      <tr role="row">
+        <th>投稿日時</th>
+        <td><%= format_date_coupon(@coupon.created_at) %></td>
+      </tr>
+
+      <tr role="row">
+        <th>画像</th>
+        <td>
+          <% if @coupon.image.try(:attached?) %>
+            <%= image_tag @coupon.image, width: 'auto', height: 200, class: 'attached-image' %>
+          <% end %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<%= link_to edit_coupon_path(@coupon), class: "btn btn-success" do %>
+  <i class="fa fa-pencil"></i>
+  <span>編集</span>
+<% end %>
+
+<%= link_to preview_coupon_path(@coupon), target: "_blank", class: "btn btn-success" do %>
+  <i class="fa fa-info-circle"></i>
+  <span>デモプレビュー</span>
+<% end %>

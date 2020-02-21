@@ -1,0 +1,85 @@
+.reviews-container {
+  border-top: 3px solid #5cb85c;
+}
+
+.review-message {
+  margin-top: 150px;
+}
+
+.review-buttons {
+  margin-top: 50px;
+}
+
+.review-yes {
+  width: 80%;
+  margin: 20px auto;
+  height: 50px;
+  border-radius: 25px;
+}
+
+.review-no {
+  width: 80%;
+  height: 50px;
+  border-radius: 25px;
+}
+
+.review-input {
+  margin-top: 50px;
+}
+
+.review-input .input-form {
+  width: 80%;
+  margin: 30px auto 0;
+  display: block;
+  height: 60px;
+  padding: 5px;
+  font-size: 24px;
+  border: 0;
+  background-color: rgba(255,255,255,.6);
+  border-radius: 10px 10px 0 0;
+  border-bottom: 3px solid #5cb85c;
+}
+
+.review-input p.notice {
+  width: 80%;
+  margin: 5px auto;
+  font-size: 12px;
+}
+
+.staff-box {
+  height: 80px;
+}
+
+.card {
+  background-color: #fff;
+  box-shadow: 1px 2px 10px rgba(0,0,0,.1);
+  margin-bottom: 20px;
+  padding: 0;
+  border-radius: 8px;
+}
+
+.staff-box-face {
+  margin: 10px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-position: center,center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  float: left;
+}
+
+.staff-name {
+  float: left;
+  line-height: 80px;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.staff-box i {
+  float: right;
+  line-height: 80px;
+  font-size: 28px;
+  margin-right: 10px;
+  color: #666;
+}

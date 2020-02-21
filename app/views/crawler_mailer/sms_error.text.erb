@@ -1,0 +1,18 @@
+SMS送信中にエラーが発生しました。
+
+案件名：
+<%= @business.name %>
+
+送信者：
+<%= @message.customer_name %>
+
+電話番号：
+<%= @message.phone_number %>
+
+以下で送信ステータスを確認できます。
+https://ranktoolap.com/messages?business_id=<%= @business.id %>
+
+「電話番号」が存在するかどうか確認していただき、
+それでも解消されない場合、お手数ですがお問い合わせ願えますでしょうか？
+
+宜しくお願い致します。

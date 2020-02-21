@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <%= form_tag reports_path, method: :GET do %>
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label pull-left">キーワード最高順位</label>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label">対策月</label>
+              <div class='input-group date' id='datepicker_month_rank'>
+                <input type="text" name="month_rank" class="form-control" autocomplete="off" value="<%= @month_rank %>" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+            <%= hidden_field_tag :business_id, @business.try(:id) || params[:business_id] %>
+            <%= hidden_field_tag :first_month_from, @first_month_from %>
+            <%= hidden_field_tag :first_month_to, @first_month_to %>
+            <%= hidden_field_tag :second_month_from, @second_month_from %>
+            <%= hidden_field_tag :second_month_to, @second_month_to %>
+            <div class="form-group col-md-12 col-xs-12">
+              <button class="btn btn-success">実行</button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="box-body">
+        <% if @month_rank.present? %>
+          <% begin_month = (@month_rank + '-01').to_date %>
+          <table class="table table-bordered detail-report">
+            <thead>
+              <tr>
+                <th class="th-report">キーワード最高順位</th>
+                <th class="th-report text-left">先月</th>
+                <th class="th-report text-left"><%= begin_month.to_date.strftime('%m') %>月</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @business.keywords.each do |keyword| %>
+                <% max_rank_last_month = keyword.max_rank_in_month(begin_month - 1.day).to_i %>
+                <% max_rank_current_month = keyword.max_rank_in_month(begin_month).to_i %>
+                <tr>
+                  <td class="text-left"><%= keyword.try(:value) %></td>
+                  <td class="text-left <%= report_class_rank(max_rank_last_month) %>"><%= report_rank_as_text(max_rank_last_month) %></td>
+                  <td class="text-left <%= report_class_rank(max_rank_current_month) %>"><%= report_rank_as_text(max_rank_current_month) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <div style="margin-top: 10px;">
+            <%= link_to "PDF出力", download_pdf_reports_path(type: 'rank', business_id: params[:business_id], month_rank: params[:month_rank]), class: "btn btn-success" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

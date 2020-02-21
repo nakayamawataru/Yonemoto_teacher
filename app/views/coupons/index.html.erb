@@ -1,0 +1,57 @@
+<%= render 'content_header' %>
+
+<section class="content">
+  <% if can? :index, CouponsController %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <%= form_tag coupons_path, { method: :get } do %>
+              <div class="form-inline">
+                <label>案件名</label>
+                <% if current_user.owner? && @business.present? %>
+                  <span><%= @business.name %></span>
+                  <input hidden class="business-id" value="<%= @business.id %>"/>
+                <% else %>
+                  <div class="business-select-tag">
+                    <%= select_tag :business_id, options_from_collection_for_select(@businesses, "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control select-business select2", onchange: "this.form.submit()" %>
+                  </div>
+                <% end %>
+                <% if @business.present? %>
+                  <%= link_to new_coupon_path(business_id: @business.id), class: 'btn btn-success' do %>
+                    <i class="fa fa-plus" aria-hidden="true"></i>
+                    <span>クーポン登録</span>
+                  <% end %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          <div class="box-body">
+            <div class="table table-responsive">
+              <table class="table table-bordered table-hover">
+                <thead>
+                  <tr role="row">
+                    <th>説明</th>
+                    <th>利用制限</th>
+                    <th>有効期限</th>
+                    <th>投稿日時</th>
+                    <th class="text-center">操作</th>
+                  </tr>
+                </thead>
+                <tbody class="coupon-list">
+                  <%= render "coupon_item", coupons: @coupons %>
+                </tbody>
+              </table>
+            </div>
+            <div id="page-entries-info">
+              <%= page_entries_info @coupons, entry_name: '項目' %>
+            </div>
+            <div id="pagination">
+              <%= paginate @coupons %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>

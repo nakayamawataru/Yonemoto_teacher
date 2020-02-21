@@ -1,0 +1,202 @@
+<% if current_user.admin? %>
+  <div class="form-group select-agent">
+    <%= f.label :agent, '代理店' %>
+    <%= f.select :agent_id, options_from_collection_for_select(User.agent + User.agent_meo_check, "id", "name", selected: @user.agent&.id), { include_blank: "選択する" }, class: "form-control select2" %>
+    <%= show_errors @user, :agent %>
+  </div>
+<% elsif current_user.is_agent? && @user.user? %>
+  <%= f.hidden_field :agent_id, value: current_user.id %>
+<% end %>
+<% if current_user.admin? %>
+  <div class="form-group">
+    <%= f.label :plan_id, 'プラン' %>
+    <%= f.select :plan_id, options_from_collection_for_select(Plan.all, "id", "name", selected: @user.plan_id), { include_blank: "選択する"}, required: true , class: "form-control" %>
+  </div>
+<% end %>
+<div class="form-group">
+  <%= f.label :name, '名前' %>
+  <%= f.text_field :name, class: "form-control" %>
+  <%= show_errors @user, :name %>
+</div>
+<div class="form-group">
+  <%= f.label :email, 'メールアドレス' %>
+  <%= f.text_field :email, class: "form-control" %>
+  <%= show_errors @user, :email %>
+</div>
+<div class="form-group">
+  <%= f.label :company, '会社' %>
+  <%= f.text_field :company, class: "form-control" %>
+  <%= show_errors @user, :company %>
+</div>
+<div class="form-group">
+  <%= f.label :phone_number, '電話番号' %>
+  <%= f.text_field :phone_number, class: "form-control" %>
+  <%= show_errors @user, :phone_number %>
+</div>
+<div class="form-group">
+  <%= f.label :password, 'パスワード' %>
+  <%= f.text_field :password, class: "form-control" %>
+  <%= show_errors @user, :password %>
+</div>
+
+<div class="form-group">
+  <%= f.label :role, 'タイプ' %>
+  <% roles = current_user.admin? ? User.roles.keys.to_a : [@user.try(:role)] %>
+  <%= f.select :role, options_from_collection_for_select(roles.collect{|p| [p, role_as_text(p), { disabled: p == "owner" }, { class: "#{'hidden' if p == 'owner' && f.object.new_record? }" } ]}, :first, :second, selected: @user.try(:role)), {}, {:class => "form-control select-role"} %>
+</div>
+
+<% if current_user.admin? %>
+  <div class="form-group">
+    <label>機能制限</label>
+    <div class="form-group">
+      <small><label class="control-label">星カクトくんを開放</label></small>
+      <%= f.check_box :restricted, {}, false, true  %>
+      <br>
+      <small><label class="control-label">クーポン機能を開放</label></small>
+      <%= f.check_box :coupon_restricted, {}, false, true %>
+      <br>
+      <small><label class="control-label">GMB機能を開放</label></small>
+      <%= f.check_box :gmb_restricted, {}, false, true %>
+      <br>
+      <small><label class="control-label">口コミ手動返信を開放</label></small>
+      <%= f.check_box :manual_reply_reviews_restricted, {}, false, true %>
+      <br>
+      <small><label class="control-label">口コミ自動返信を開放</label></small>
+      <%= f.check_box :auto_reply_reviews_restricted, {}, false, true %>
+      <br>
+      <small><label class="control-label">投稿機能を開放</label></small>
+      <%= f.check_box :auto_post_restricted, {}, false, true %>
+    </div>
+  </div>
+<% else %>
+  <div class="form-group">
+    <label>機能制限</label>
+    <div class="form-group">
+      <small><label class="control-label">星カクトくんを開放</label></small>
+      <%= f.check_box :restricted, { disabled: true, checked: (@user.new_record? ? !current_user.restricted : !@user.restricted) }, false, true %>
+      <br>
+      <small><label class="control-label">クーポン機能を開放</label></small>
+      <%= f.check_box :coupon_restricted, { disabled: true, checked: (@user.new_record? ? !current_user.coupon_restricted : !@user.coupon_restricted) }, false, true %>
+      <br>
+      <small><label class="control-label">GMB機能を開放</label></small>
+      <%= f.check_box :gmb_restricted, { disabled: current_user == f.object, checked: (@user.new_record? ? !current_user.gmb_restricted : !@user.gmb_restricted)  }, false, true %>
+      <br>
+      <small><label class="control-label">口コミ手動返信を開放</label></small>
+      <%= f.check_box :manual_reply_reviews_restricted, { disabled: true, checked: (@user.new_record? ? !current_user.manual_reply_reviews_restricted : !@user.manual_reply_reviews_restricted) }, false, true %>
+      <br>
+      <small><label class="control-label">口コミ自動返信を開放</label></small>
+      <%= f.check_box :auto_reply_reviews_restricted, { disabled: true, checked: (@user.new_record? ? !current_user.auto_reply_reviews_restricted : !@user.auto_reply_reviews_restricted) }, false, true %>
+      <br>
+      <small><label class="control-label">投稿機能を開放</label></small>
+      <%= f.check_box :auto_post_restricted, { disabled: current_user == f.object, checked: (@user.new_record? ? !current_user.auto_post_restricted : !@user.auto_post_restricted)  }, false, true %>
+    </div>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <%= f.label :expire_at, '有効期限' %>
+  <div class='input-group date datetimepicker'>
+    <span class="input-group-addon">
+      <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    <%= f.text_field :expire_at, class: "form-control", disabled: current_user == f.object || current_user.agent_meo_check? %>
+  </div>
+</div>
+
+<% if current_user.admin? %>
+  <div class="form-group">
+    <%= f.label :max_sms_in_day, '送信上限数' %>
+    <%= f.number_field :max_sms_in_day, class: "form-control" %>
+  </div>
+<% else %>
+  <div class="form-group">
+    <%= f.label :max_sms_in_day, '送信上限数' %>
+    <%= f.number_field :max_sms_in_day, class: "form-control", disabled: true %>
+  </div>
+<% end %>
+
+<hr>
+
+<label> widget カスタム設定 </label>
+<br>
+
+<small>
+  widget機能で使用する「ロゴ」と「色コード」を設定
+  <br>
+  未入力の場合はトライハッチのロゴが表示
+</small>
+
+<div class="form-group">
+  <%= f.label :logo, 'ロゴ' %>
+  <%= f.file_field :logo, class: "form-control" %>
+  <%= hidden_field_tag 'remove_logo', 1 %>
+</div>
+<div class="image-logo" style="display: <%= @user.try(:logo_url) ? "" : "none" %>">
+  <div class="image_preview">
+    <img src="<%= @user.try(:logo_url) %>">
+  </div>
+  <div>
+    <div class="btn btn-danger delete-logo">
+      <i class="fa fa-trash-o"></i>
+    </div>
+  </div>
+</div>
+
+<div class="form-group">
+  <%= f.label :logo_target_url, '移先のURL' %>
+  <%= f.text_field :logo_target_url, placeholder: "移先のURL", class: "form-control" %>
+</div>
+<div class="form-group">
+  <%= f.label :color, '色コード' %>
+  <%= f.text_field :color, placeholder: "#ff0000", class: "form-control", maxlength: 7 %>
+  <%= show_errors @user, :color %>
+  <small> 色コードには「#」もつけること </small>
+</div>
+
+<hr>
+
+<% if current_user.admin? || current_user.is_agent? %>
+  <label> 代理店用カスタマイズ </label>
+  <small>
+    代理店および、その先のユーザーに適応されます。
+    <br>
+    代理店ユーザーにのみ適応をお願いします。
+  </small>
+
+  <div class="form-group">
+    <%= f.label :header_color, '色コード(管理画面のヘッダの色)' %>
+    <%= f.text_field :header_color, placeholder: "#ff0000", class: "form-control", maxlength: 7 %>
+    <%= show_errors @user, :header_color %>
+    <small> 色コードには「#」もつけること </small>
+  </div>
+
+  <% if current_user.admin? %>
+    <div class="form-group">
+      <%= f.label :header_logo, 'ロゴ' %>
+      <%= f.file_field :header_logo, class: "form-control" %>
+      <%= hidden_field_tag 'remove_header_logo', 1 %>
+    </div>
+    <div class="image-header-logo" style="display: <%= @user.try(:header_logo_url) ? "" : "none" %>">
+      <div class="image_header_logo_preview">
+        <img src="<%= @user.try(:header_logo_url) %>">
+      </div>
+      <div>
+        <div class="btn btn-danger delete-header-logo">
+          <i class="fa fa-trash-o"></i>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <!--<div class="form-group">
+    <%= f.label :skin_theme, '色コード(管理画面のヘッダの色)' %>
+
+    <% colors = %w( blue blue-light yellow yellow-light green green-light purple purple-light red red-light black black-light ) %>
+    <%= f.select :skin_theme, colors, {include_blank: "選択する"}, class: "form-control" %>
+  </div>-->
+<% end %>
+
+<div class="form-group">
+  <%= f.label :benchmark_business_limit, 'ベンチマーク上限数' %>
+  <%= f.number_field :benchmark_business_limit, placeholder: "ベンチマーク上限数", class: "form-control" %>
+</div>

@@ -1,0 +1,7 @@
+<section class="content-header">
+  <h1>
+    <% unless can? :index, CouponsController %>
+      <p><%= I18n.t('user.restricted_function') %></p>
+    <% end %>
+  </h1>
+</section>

@@ -1,0 +1,60 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/display_coupon' %>
+<% end %>
+
+<div id="content">
+  <div class="col-md-6 col-sm-2 col-md-offset-3 col-sm-offset-5 coupon-container">
+    <% if @coupon_sms_review.present? %>
+      <% coupon = @coupon_sms_review.coupon %>
+      <div class="expire-time text-center">
+        <h4>有効期限　<%= format_date_coupon(coupon.try(:expire_at), '%Y/%m/%d %H:%M') %> まで</h4>
+      </div>
+
+      <div class="text-center">
+       <h3>あと<%= coupon.limit_num - @coupon_sms_review.used_num %>回使用できます</h3>
+      </div>
+
+      <div class="coupon-image">
+        <% if coupon.image.try(:attached?) %>
+          <%= image_tag coupon.image, width: '100%', height: 'auto' %>
+        <% end %>
+      </div>
+
+      <div class="text-center">
+        <h5><%= simple_format coupon.description %></h5>
+      </div>
+
+      <div class="coupon-buttons text-center">
+        <button class="btn btn-success use-coupon-btn" <%= 'disabled' unless coupon.active? %>>使用する</button>
+        <% unless coupon.active? %>
+          <p class="expried-coupon">有効期限がきれております</p>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="text-center">
+        <h4>不正なクーポンです。</h4>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<div id="confirmModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-center">本当に使用しますか？</h4>
+      </div>
+      <div class="modal-footer">
+        <div class="text-center">
+          <button type="button" class="btn btn-default" data-dismiss="modal">いいえ</button>
+          <%= link_to consume_cv_index_path(@coupon_sms_review.slug), class: 'btn btn-success', method: :post do %>
+            <span>はい</span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

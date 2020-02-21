@@ -1,0 +1,18 @@
+<div class="content-business-review">
+  <div class="content-review">
+    <%= link_to '下記をコピーして口コミをする', '', class: "btn btn-primary btn-redirect copy" %>
+    <textarea rows="8" class='text-review' id="review"><%= @content %></textarea>
+    <input type="hidden" id="review_url" name="review_url" value="<%= review_url_with_type(@business, @business_type) %>">
+  </div>
+</div>
+
+<script>
+  $('.copy').on('click', function(e) {
+    e.preventDefault()
+    let copyText = document.getElementById("review")
+    copyText.select()
+    copyText.setSelectionRange(0, 99999)
+    document.execCommand("copy")
+    window.location.href = $('#review_url').val()
+  })
+</script>

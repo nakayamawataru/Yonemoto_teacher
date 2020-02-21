@@ -1,0 +1,77 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/session' %>
+<% end %>
+
+<div class="login-box">
+  <div class="login-logo">
+      <h2 style="color: white">
+        デモ登録
+      </h2>
+  </div>
+  <div class="login-box-body">
+    <p class="login-box-msg">登録後10日間<br>無料でご利用いただけます。</p>
+    <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+      <div class="row">
+        <div class="col-xs-12">
+          <div class="form-group has-feedback">
+            <label class="control-label">名前</label>
+            <%= f.text_field :name, autofocus: true, autocomplete: "name", class:"form-control" %>
+            <span class="glyphicon glyphicon-user form-control-feedback"></span>
+            <%= show_errors @user, :name %>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="form-group has-feedback">
+            <label class="control-label">会社</label>
+            <%= f.text_field :company, autofocus: true, autocomplete: "company", class:"form-control" %>
+            <span class="glyphicon glyphicon-home form-control-feedback"></span>
+            <%= show_errors @user, :company %>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="form-group has-feedback">
+            <label class="control-label">メールアドレス</label>
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+            <%= show_errors @user, :email %>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="form-group has-feedback">
+            <label class="control-label">電話番号</label>
+            <%= f.text_field :phone_number, autofocus: true, autocomplete: "phone_number", class:"form-control" %>
+            <span class="glyphicon glyphicon-earphone form-control-feedback"></span>
+            <%= show_errors @user, :phone_number %>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="form-group has-feedback">
+            <label class="control-label">パスワード</label>
+            <%= f.password_field :password, autocomplete: "new-password", class:"form-control" %>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <%= show_errors @user, :password %>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <div class="form-group has-feedback">
+            <label class="control-label">パスワード（確認用）</label>
+            <%= f.password_field :password_confirmation, autocomplete: "new-password", class:"form-control" %>
+            <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+            <%= show_errors @user, :password_confirmation %>
+          </div>
+        </div>
+        <div class="col-xs-12">
+          <%= f.submit "利用規約に同意の上登録する", class:"btn btn-success btn-block btn-flat" %>
+        </div>
+        <div class="col-xs-12">
+          <div class="direct-link" style="display: inline-block">
+            <%= link_to 'ログイン', new_user_session_path, method: :delete %>
+          </div>
+          <div class="direct-link" style="display: inline-block;float: right;">
+            <%= link_to '利用規約', 'https://meo.tryhatch.co.jp/meocheki/terms/', target: '_blank' %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div

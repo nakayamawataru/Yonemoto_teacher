@@ -1,0 +1,31 @@
+<% data_charts.each do |data_chart| %>
+  <tr>
+    <td><%= data_chart[:date] %></td>
+    <td><%= data_chart[:ranking] %></td>
+    <td style="text-align: center;">
+      <% if data_chart[:compare_rank] < 0 %>
+        <span style="color: green;" class="glyphicon glyphicon-arrow-up"></span>
+        <%= data_chart[:compare_rank].abs %>
+      <% elsif data_chart[:compare_rank] > 0 %>
+        <span style="color: red;" class="glyphicon glyphicon-arrow-down"></span>
+        <%= data_chart[:compare_rank].abs %>
+      <% else %>
+        <span style="color: #555;" class="glyphicon glyphicon-arrow-right"></span>
+      <% end %>
+    </td>
+    <td><%= data_chart[:keyword] %></td>
+    <td><%= data_chart[:base_location_japanese] %></td>
+  </tr>
+<% end %>
+<tr>
+  <th scope="row" class="text-memo-th">メモ</th>
+  <td colspan="4" style="text-align: left">
+    <% memos.each do |m|%>
+      <% if m.user == current_user %>
+        <p><%= "- #{m.title}" %></p>
+      <% else %>
+        <p><%= "- #{m.title} （#{m.user.company}）" %></p>
+      <% end %>
+    <% end %>
+  </td>
+</tr>

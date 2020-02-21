@@ -1,0 +1,10 @@
+<tr class="nested-fields">
+  <td><%= f.object.try(:id) %></td>
+  <td><%= f.text_field :name, class: "form-control" %></td>
+  <td><%= f.object.try(:created_at).try :strftime, "%Y/%m/%d - %H:%M" %></td>
+  <td class="text-center">
+    <%= link_to_remove_association f, class: 'btn btn-success btn-remove-benchmark-business' do %>
+      <i class="fa fa-trash"></i>
+    <% end %>
+  </td>
+</tr>

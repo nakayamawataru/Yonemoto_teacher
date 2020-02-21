@@ -1,0 +1,57 @@
+<%= render 'content_header' %>
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/users' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">ユーザー編集</h3>
+        </div>
+        <div class="box-body">
+          <%= form_for @user, url: user_path, method: :put do |f| %>
+            <%= render 'form', f: f %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">キーワード履歴</h3>
+        </div>
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ビジネス名</th>
+                <th>日付</th>
+                <th>回数</th>
+                <th>キーワード</th>
+              </tr>
+            </thead>
+            <tbody class="user-list">
+              <% if @user.businesses.present? %>
+                <% @user.businesses.each do |business| %>
+                  <%= render 'keywords_histories', business: business %>
+                <% end %>
+              <% else %>
+                <% if @user.owner? && @user.owner_business %>
+                  <%= render 'keywords_histories', business: @user.owner_business %>
+                <% else %>
+                  <p>過去データなし</p>
+                <% end %>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

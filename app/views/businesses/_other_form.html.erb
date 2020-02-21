@@ -1,0 +1,58 @@
+<div class="form-group">
+  <label><small>プレースID</small></label>
+  <%= f.text_field :place_id, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :place_id %>
+</div>
+
+<div class="form-group">
+  <label><small>案件ID</small></label>
+  <%= f.text_field :location_id, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :location_id %>
+</div>
+
+<div class="form-group">
+  <label><small>郵便番号</small></label>
+  <%= f.text_field :postal_code, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :postal_code %>
+</div>
+
+<div class="form-group">
+  <label><small>ウェブサイトURL</small></label>
+  <%= f.text_field :website_url, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :website_url %>
+</div>
+
+<div class="form-group">
+  <label><small>県</small></label>
+  <%= f.text_field :prefecture, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :prefecture %>
+</div>
+
+<div class="form-group">
+  <label><small>口コミURL</small></label>
+  <%= f.text_field :review_url, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :review_url %>
+</div>
+
+<div class="form-group">
+  <label><small>地図URL</small></label>
+  <%= f.text_field :map_url, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :map_url %>
+</div>
+
+<div class="form-group">
+  <label><small>プロファイルの説明</small></label>
+  <%= f.text_area :profile_description, rows: 3, placeholder: "", class: "form-control", disabled: true %>
+  <%= show_errors @business, :profile_description %>
+</div>
+
+<div class="form-group">
+  <label><small>メインカテゴリ</small></label>
+  <%= text_field_tag :category_primary, @business.category_business.primary.first&.category&.name, class: 'form-control', disabled: true %>
+</div>
+
+<div class="form-group">
+  <label><small>他カテゴリ</small></label>
+  <%= text_area_tag :categories_addition, @business.category_business.addition.map{ |c| c.category.name }.join('&#13;&#10;').html_safe,
+    rows: 3, class: "form-control", disabled: true %>
+</div>

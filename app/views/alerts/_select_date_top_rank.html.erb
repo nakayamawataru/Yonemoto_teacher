@@ -1,0 +1,26 @@
+<div class="table-info-charts info-alert">
+  <div class="actions">
+    <div class="calendar">
+      <div class="text-date-filter">
+        <p class="text-date">
+          <%= I18n.l(@date_top_rank, format: '%Y年%m月%d日') %>
+        </p>
+      </div>
+      <div class='input-group date' id='top_rank_datepicker'>
+        <input type='text' class="form-control date-top-rank-fillter" value="<%= @date_top_rank.strftime('%Y-%m-%d') %>" />
+        <span class="input-group-addon icon-date-fillter">
+          <span class="glyphicon glyphicon-calendar"></span>
+        </span>
+      </div>
+    </div>
+
+    <div class="action-list">
+      <%= link_to alerts_path(date_top_rank: (@date_top_rank - 1.day), date: @date, type: 'top_rank'), class: 'btn btn-default btn-sm previous-date', remote: true do %>
+        <span class="glyphicon glyphicon-chevron-left"></span>
+      <% end %>
+      <%= link_to alerts_path(date_top_rank: (@date_top_rank + 1.day), date: @date, type: 'top_rank'), class: 'btn btn-default btn-sm next-date', remote: true do %>
+        <span class="glyphicon glyphicon-chevron-right"></span>
+      <% end %>
+    </div>
+  </div>
+</div>

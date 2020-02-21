@@ -1,0 +1,16 @@
+<% coupons.each do |coupon| %>
+  <tr>
+    <td><%= link_to simple_format(coupon.description), coupon_path(coupon) %></td>
+    <td><%= coupon.limit_num %></td>
+    <td><%= format_date_coupon(coupon.try(:expire_at)) %></td>
+    <td><%= format_date_coupon(coupon.try(:created_at)) %></td>
+    <td style="text-align:center;">
+      <%= link_to coupon_path(coupon), class: 'btn btn-success' do %>
+        <i class="fa fa-info"></i>
+      <% end %>
+      <%= link_to coupon_path(coupon), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-danger" do %>
+        <i class="fa fa-trash"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

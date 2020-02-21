@@ -1,0 +1,119 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/full_calendar' %>
+<% end %>
+
+<!-- <%= render 'content_header' %> -->
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <%= form_tag calendars_path, { method: :get, id: 'filter-for-calendar' } do %>
+          <div class="box-header">
+            <div class="form-inline">
+              <label>案件名</label>
+              <% if current_user.owner? && @business.present? %>
+                <span><%= @business.name %></span>
+              <% else %>
+                <div class="business-select-tag">
+                  <%= select_tag :business_id, options_from_collection_for_select(@businesses, "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control calendar-filter-select select-business select2" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="box-body">
+            <div class="search-form row">
+              <%= render "filter_form" %>
+            </div>
+        <% end %>
+            <% if current_user.admin? && @business.present? %>
+              <div class='export-import-rank'>
+                <hr>
+                <div class="col col-xs-12 col-sm-6 col-md-2">
+                  <%= link_to export_rank_calendars_path(month: @month, business_id: @business.id), method: :post do %>
+                      <i class="fa fa-cloud-download" aria-hidden="true"></i> 順位CSV Export
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+      </div>
+      <% if @business.present? %>
+        <div class="box">
+          <div class="box-body">
+            <div id="calendar"></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<% if @business%>
+  <section class="content">
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <table class="table table-bordered detail-ranks">
+            <thead>
+              <tr>
+                <th class="text-center" style="width: 150px">日付</th>
+                <th class="text-center" style="width: 150px">表示順位</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% (@parse_month.beginning_of_month..@parse_month.end_of_month).each do |day| %>
+                <tr>
+                  <td class="text-center" style="vertical-align: middle;"><%= day %></td>
+                  <td class="text-center">
+                    <% @business.ranking_keywords(day).each do |meo| %>
+                      <% if meo.present? %>
+                        <% if current_user.admin? %>
+                          <div class='section-edit-rank section-edit-rank-<%= meo.id %>'>
+                            <input type='text' class='edit-rank-meo-history rank-meo-history-<%= meo.id %>' value='<%= meo.rank.to_i %>' maxlength='2'>
+                            <span class='btn-edit-rank' data-meo-id='<%= meo.id %>'><i class="fa fa-floppy-o" aria-hidden="true"></i></span>
+                            <span class='btn-close-edit-rank' data-meo-id='<%= meo.id %>'><i class="fa fa-times" aria-hidden="true"></i></span>
+                          </div>
+                        <% end %>
+                        <div class='section-show-rank section-show-rank-<%= meo.id %>'>
+                          <span class='text-rank-<%= meo.id %>'><%= (meo.rank > 0 && meo.rank < 21) ? "#{meo.rank}位" : '圏外' %></span>
+                          <% if current_user.admin? %>
+                            <span class='btn-show-edit-rank' data-meo-id='<%= meo.id %>'><i class='fa fa-edit' aria-hidden='true'></i></span>
+                          <% end %>
+                        </div>
+                      <% end %>
+                    <% end %>
+                  </td>
+                  <td>
+                    <% @business.ranking_keywords(day).each do |meo| %>
+                      <% if meo.present? %>
+                        <p>
+                          <%= meo.keyword.value %>
+                          <% meo.images.each do |image| %>
+                            <%= link_to image_rank_calendars_path(image: image),
+                              target: '_blank' do %>
+                              <i class="fa fa-file-image-o" aria-hidden="true"></i>
+                            <% end %>
+                          <% end %>
+                        </p>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+<% end %>
+
+<div class="notification-save-content-review wrapper"></div>
+<div class="modal modal-loading">
+  <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+    <span class="fa fa-spinner fa-spin fa-3x"></span>
+  </div>
+</div>

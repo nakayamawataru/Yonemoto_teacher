@@ -1,0 +1,60 @@
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>案件名</th>
+      <th>作成日時</th>
+      <th class="text-center">編集</th>
+    </tr>
+  </thead>
+  <tbody class="benchmark_business-list">
+    <%= f.fields_for :benchmark_business do |ff| %>
+      <%= render "benchmark_business_fields", f: ff %>
+    <% end %>
+  </tbody>
+</table>
+<p>
+  <%= link_to_add_association f, :benchmark_business,
+    data: {"association-insertion-node" => "tbody.benchmark_business-list", "association-insertion-method" => "append"},
+    class: 'btn btn-success btn-add-benchmark-business' do %>
+    <i class="fa fa-plus"></i>
+    <span>登録</span>
+  <% end %>
+</p>
+
+
+<script>
+  $('.btn-add-benchmark-business').on('click', function() {
+    checkBenchmarkBusiness();
+  })
+
+  $('.benchmark_business-list').on('click', '.btn-remove-benchmark-business', function() {
+    checkBenchmarkBusiness();
+  })
+
+  $('#business_user_id').on('change', function() {
+    checkBenchmarkBusiness();
+  })
+
+  function checkBenchmarkBusiness() {
+    const user_id = $('#business_user_id').val();
+
+    $.ajax({
+      type: 'GET',
+      url: '/api/benchmark_business_limit',
+      dataType: 'json',
+      data: {
+        user_id: user_id
+      },
+      success: function (response) {
+        const benchmark_business = response.benchmark_business_limit;
+        const fields_benchmark_business = $('.benchmark_business-list > .nested-fields').length;
+        if(fields_benchmark_business >= benchmark_business) {
+          $('.btn-add-benchmark-business').css('display', 'none');
+        } else {
+          $('.btn-add-benchmark-business').css('display', 'initial');
+        }
+      }
+    });
+  }
+</script>

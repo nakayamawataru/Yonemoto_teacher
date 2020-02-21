@@ -1,0 +1,86 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/pattern' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <%= render 'shared/setting_sidebar' %>
+
+    <div class="col-md-9 col-sm-9">
+      <div class="box">
+        <div class="box-header">
+          <b>口コミ質問&内容設定</b>
+        </div>
+        <div class="box-body">
+          <%= form_tag setting_qa_reviews_path, { method: :get } do %>
+            <div class="form-inline">
+              <label>案件名</label>
+              <div class="business-select-tag">
+                <%= select_tag :business_id, options_from_collection_for_select(Business.accessible_by(current_ability), "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control select-business select2", onchange: "this.form.submit();" %>
+              </div>
+            </div>
+          <% end %>
+          <br>
+          <% if @business.present? %>
+            <label>口コミURL</label>
+            <div class="form-group">
+              <%= link_to r_url(id: @business.bid), r_url(id: @business.bid), target: "_blank" %>
+            </div>
+
+            <%= form_tag setting_qa_reviews_path(business_id: @business), method: :post, html: {class: "edit_pattern_form"} do |f| %>
+              <label>クチコミのフロー</label>
+              <div class="form-group">
+                <label class="radio-inline">
+                  <%= radio_button_tag :show_qa, true, @business.show_qa %> 表示する
+                </label>
+                <label class="radio-inline">
+                  <%= radio_button_tag :show_qa, false, !@business.show_qa %> 表示しない
+                </label>
+              </div>
+
+              <label>質問①</label>
+              <div class="form-group">
+                <%= text_area_tag :question_1, content_qa_review(@business, QaReview::QUESTION_1), class:"form-control" %>
+              </div>
+
+              <label>質問②</label>
+              <div class="form-group">
+                <%= text_area_tag :question_2, content_qa_review(@business, QaReview::QUESTION_2), class:"form-control" %>
+              </div>
+              <label>口コミ内容</label>
+              <small>
+                質問①はい＋質問②はい
+              </small>
+              <div class="form-group">
+                <%= text_area_tag :answer_1, content_qa_review(@business, QaReview::ANSWER_1), class:"form-control", rows: 4 %>
+              </div>
+              <label>口コミ内容</label>
+              <small>
+                質問①はい＋質問②いいえ
+              </small>
+              <div class="form-group">
+                <%= text_area_tag :answer_2, content_qa_review(@business, QaReview::ANSWER_2), class:"form-control", rows: 4 %>
+              </div>
+              <label>口コミ内容</label>
+              <small>
+                質問①いいえ＋質問②はい
+              </small>
+              <div class="form-group">
+                <%= text_area_tag :answer_3, content_qa_review(@business, QaReview::ANSWER_3), class:"form-control", rows: 4 %>
+              </div>
+              <label>口コミ内容</label>
+              <small>
+                質問①いいえ＋質問②いいえ
+              </small>
+              <div class="form-group">
+                <%= text_area_tag :answer_4, content_qa_review(@business, QaReview::ANSWER_4), class:"form-control", rows: 4 %>
+              </div>
+
+              <%= submit_tag '保存', class: 'btn btn-success' %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

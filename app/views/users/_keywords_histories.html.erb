@@ -1,0 +1,12 @@
+<% if business.keywords_histories.present? %>
+  <% business.keywords_histories.where(date: Date.current.beginning_of_month..Date.current.end_of_month).order(date: :desc).each do |history| %>
+    <tr>
+      <td><%= business.name %></td>
+      <td><%= history.date.strftime('%m/%d') %></td>
+      <td><%= history.count %></td>
+      <td><%= history.content %></td>
+    </tr>
+  <% end %>
+<% else %>
+  <p><%= business.name %>: 過去データなし</p>
+<% end %>

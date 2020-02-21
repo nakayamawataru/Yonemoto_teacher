@@ -1,0 +1,21 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'qr/simple' %>
+<% end %>
+
+<%= content_for :additional_stylesheet do %>
+  <%= stylesheet_link_tag 'qr/page' %>
+<% end %>
+
+<div id="content">
+  <div class="col-sm-2 col-sm-offset-5 reviews-container">
+    <div class="review-message text-center">
+      <h3>「<%= @business.name %>」は、</h3>
+      <h3>オススメできますか？</h3>
+    </div>
+
+    <div class="review-buttons text-center">
+      <button class="btn btn-success review-yes">はい</button>
+      <button class="btn btn-default review-no">いいえ</button>
+    </div>
+  </div>
+</div>

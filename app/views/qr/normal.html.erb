@@ -1,0 +1,51 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'qr/normal' %>
+<% end %>
+
+<%= content_for :additional_stylesheet do %>
+  <%= stylesheet_link_tag 'qr/page' %>
+<% end %>
+
+<div id="content">
+  <div class="col-sm-2 col-sm-offset-5 reviews-container">
+    <div id="review-box-a">
+      <div class="review-message text-center">
+        <h3>お名前をご記入ください。</h3>
+      </div>
+
+      <div class="review-input">
+        <input class="input-form" id="input-name" type="text" name="name" placeholder="例）山田太郎" class="form-control">
+        <p class="notice">※こちらはインターネットには公開されません。</p>
+      </div>
+
+      <div class="review-buttons text-center">
+        <button class="btn btn-success review-yes" style="display: none;">決定</button>
+      </div>
+    </div>
+
+    <div id="review-box-b" style="display: none;">
+      <div class="review-message text-center">
+        <h3>担当は誰ですか？</h3>
+      </div>
+
+      <div class="review-input">
+        <% @staffs.each do |staff| %>
+          <%= form_tag normal_process_qr_index_path(business_id: @business.id) do %>
+            <%= hidden_field_tag :to_name, nil %>
+            <%= hidden_field_tag :staff_id, staff.id %>
+            <div class="staff-box card clickable staff-submit">
+              <div class="staff-box-face" style="background-image:url(<%= staff.image.try(:attached?) ? url_for(staff.image) : '' %>);"></div>
+              <div class="staff-name"><%= staff.staffname %></div>
+              <i class="fa fa-chevron-circle-right"></i>
+              <div class="clear"></div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+
+      <div class="review-buttons text-center">
+        <button class="btn btn-default review-no">戻る</button>
+      </div>
+    </div>
+  </div>
+</div>

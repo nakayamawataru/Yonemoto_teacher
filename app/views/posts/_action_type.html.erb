@@ -1,0 +1,18 @@
+<div class="form-group">
+  <label class="control-label">ボタンの追加（省略可）</label>
+  <%= f.select :action_type, options_for_select(option_action_types, params[:action_type] || @post.action_type), {}, { class: "form-control action-type-post" } %>
+</div>
+<div class="form-group action-url-post <%= ['CALL', 'N0_ACTION', nil].exclude?(params[:action_type] || @post.action_type) ? '' : 'd-none' %>">
+  <%= f.label :action_url, 'ボタンのリンク' %>
+  <%= f.text_field :action_url, class: "form-control" %>
+  <% if params[:error].try(:[], :action_url).present? %>
+    <ul class='tm-validation-errors'>
+      <li class='tm-validation-error-message'>ボタンのリンク<%= params[:error][:action_url].first %></li>
+    </ul>
+  <% end %>
+</div>
+
+<div class="form-group action-phone-number-post <%= (params[:action_type] || @post.action_type) == 'CALL' ? '' : 'd-none' %>">
+  <%= f.label :action_phone_number, '電話番号' %>
+  <%= f.text_field :action_phone_number, class: "form-control", value: @business&.owner.try(:phone_number), disabled: true %>
+ </div>

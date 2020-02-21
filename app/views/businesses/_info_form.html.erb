@@ -1,0 +1,148 @@
+<% unless @base_address_exist %>
+  <div class="alert alert-warning">
+    <strong>「住所指定検索」</strong> は検索地点一覧から取ってください。
+  </div>
+<% end %>
+<% if current_user.admin? %>
+  <div class="form-group">
+    <label><small>ユーザー</small></label>
+    <%= f.select :user_id, options_from_collection_for_select(User.all, "id", "name", selected: @business.try(:user_id) || current_user.id), { include_blank: "選択する" }, { class: "form-control select2" } %>
+    <%= show_errors @business, :user %>
+  </div>
+<% elsif current_user.is_agent? %>
+  <div class="form-group">
+    <label><small>ユーザー</small></label>
+    <%= f.select :user_id, options_from_collection_for_select([current_user] + current_user.users, "id", "name", selected: @business.try(:user_id) || current_user.id), { include_blank: "選択する" }, { class: "form-control select2" } %>
+    <%= show_errors @business, :user %>
+  </div>
+<% else %>
+  <%= f.hidden_field :user_id, value: current_user.id %>
+<% end %>
+<div class="form-group">
+  <label><small>案件名</small></label>
+  <%= f.text_field :name, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :name %>
+</div>
+
+<div class="form-group">
+  <label><small>日額成果報酬費用（税込）</small></label>
+  <%= f.number_field :performance_fee, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :performance_fee %>
+</div>
+
+<div class="form-group">
+  <label><small>月額固定費用（税込）</small></label>
+  <%= f.number_field :performance_month_fee, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :performance_month_fee %>
+  <small>
+    ※ 日額成果報酬費用か、月額固定費用、いずれか入力した方の契約金額を適応
+  </small>
+</div>
+
+<% if current_user.admin? || current_user.agent? %>
+  <div class="form-group">
+    <label><small>日額</small></label>
+    <%= f.number_field :daily_unit_price, placeholder: "", class: "form-control" %>
+    <%= show_errors @business, :daily_unit_price %>
+  </div>
+
+  <div class="form-group">
+    <label><small>粗利額</small></label>
+    <%= f.number_field :profit_amount, placeholder: "", class: "form-control" %>
+    <%= show_errors @business, :profit_amount %>
+  </div>
+
+  <div class="form-group">
+    <label><small>月額粗利</small></label>
+    <%= f.number_field :monthly_profit_amount, placeholder: "", class: "form-control" %>
+    <%= show_errors @business, :monthly_profit_amount %>
+  </div>
+<% end %>
+
+<div class="form-group">
+  <label><small>電話番号</small></label>
+  <%= f.text_field :primary_phone, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :primary_phone %>
+</div>
+
+<div class="form-group">
+  <label><small>住所指定検索</small></label>
+  <%= f.select :base_address, [], {include_blank: false}, { id: 'base_address', class: 'form-control' }%>
+  <%= show_errors @business, :base_address %>
+</div>
+
+<div class="form-group">
+  <label><small>状態</small></label>
+  <%= f.select :status, options_from_collection_for_select(Business.statuses.keys.to_a.map{|n| [n, convert_status(n)]}, :first, :second), {}, class: "form-control" %>
+</div>
+
+<% if current_user.admin? || current_user.agent_meo_check? %>
+  <hr>
+  <div class="form-group">
+    <%= f.label :time_crawler, '順位取得の実行時間' %>
+    <div class='input-group date' id='time_crawler_datepicker'>
+      <span class="input-group-addon">
+        <span class="glyphicon glyphicon-time"></span>
+      </span>
+      <%= f.text_field :time_crawler, class: "form-control" %>
+    </div>
+    <%= show_errors @business, :time_crawler %>
+    <small>※ 00〜21時までの時間帯をご入力してください</small>
+  </div>
+<% end %>
+
+<hr>
+
+<div class="form-group">
+  <label><small>表示パターン</small></label>
+  <%= f.select :pattern_review, [['全部表示', QaReview::REVIEW_PATTERN_ALL], ['Googleだけ', QaReview::REVIEW_PATTERN_GOOGLE_FIRST]], {}, class: "form-control" %>
+</div>
+
+<div class="form-group">
+  <%= f.label :logo_review_message, 'ロゴ' %>
+  <%= f.file_field :logo_review_message, class: "form-control" %>
+  <%= hidden_field_tag 'remove_logo_review_message', 1 %>
+</div>
+<div class="image-review-message" style="display: <%= @business.logo_review_message_url ? "" : "none" %>">
+  <div class="image_preview">
+    <img src="<%= @business.logo_review_message_url %>">
+  </div>
+  <div>
+    <div class="btn btn-danger delete-logo">
+      <i class="fa fa-trash-o"></i>
+    </div>
+  </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+    const base_address = '<%= @business.base_address %>'
+   $('#base_address').select2({
+        data: [{id: base_address, text: base_address}],
+    });
+    $('#base_address').val(base_address);
+    $('#base_address').trigger('change.select2');
+
+    $('#base_address').select2({
+      ajax: {
+        url: '/api/base_locations/find_base_location',
+        dataType: 'json',
+        type: "GET",
+        delay: 200,
+        data: function (params) {
+          return {
+              q: params.term
+          };
+        },
+        processResults: function (data) {
+          var res = data.map(function (item) {
+            return {id: item.base_address, text: item.base_address};
+          });
+          return {
+              results: res
+          };
+        }
+      }
+    });
+  });
+</script>

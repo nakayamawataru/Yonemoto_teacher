@@ -1,0 +1,44 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title"><%= @payment.payed_at.strftime("%Y年%m月") %>の決済情報編集</h3>
+        </div>
+        <div class="box-body">
+          <%= form_for @payment, url: "/payments/#{@payment.id}", method: :put do |f| %>
+            <%= hidden_field_tag :user_id, params[:user_id] %>
+            <div class="form-group">
+              <%= f.label :amount, '合計金額' %>
+              <%= f.number_field :amount, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= f.label :init_price, '初期費用' %>
+              <%= f.number_field :init_price, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= f.label :month_price, '月額費用' %>
+              <%= f.number_field :month_price, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= f.label :review_price, '星カクトくん' %>
+              <%= f.number_field :review_price, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= f.label :status, 'ステータス' %>
+              <%= f.select :status, options_from_collection_for_select(TotalMonthlyFee.statuses.keys.to_a.map{|n| [n, convert_payment_status(n)]}, :first, :second), {}, class: "form-control" %>
+            </div>
+            <div class="form-group">
+              <%= f.label :note, '備考' %>
+              <%= f.text_area :note, rows: 5, class: "form-control" %>
+            </div>
+            <div class="pull-right">
+              <%= link_to "キャンセル", payments_path, class:  "btn btn-default" %>
+              <%= f.submit "保存", class: "btn btn-success"%>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

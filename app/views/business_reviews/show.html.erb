@@ -1,0 +1,13 @@
+<div class="content-business-review">
+  <div class="logo-business-revivew">
+    <img src="<%= @business.logo_review_message_url %>">
+  </div>
+  <div class="question">
+    「<%= @business.name %>」はおすすめできますか？
+  </div>
+  <div class="answer">
+    <%= link_to 'はい', @business.pattern_review.to_i == QaReview::REVIEW_PATTERN_GOOGLE_FIRST ? platforms_google_r_path(id: @business.bid) : platforms_r_path(id: @business.bid),
+      class: "btn btn-primary btn-yes" %>
+    <%= link_to 'いいえ', feedback_r_path(id: @business.bid), class: "btn btn-default btn-no" %>
+  </div>
+</div>

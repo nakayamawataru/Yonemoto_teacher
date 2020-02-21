@@ -1,0 +1,17 @@
+<% @results.each do |result| %>
+  <b>
+    Processing crawler keyword: <%= result.keyword.value %> -- business_id: <%= result.business.id %>
+  </b>
+  <p>
+    Images errors below:
+  </p>
+  <ul>
+
+  </ul>
+  <% result.images.each do |image| %>
+    <li>
+      <%= link_to result.keyword.value,
+        ENV['DOMAIN'] + '/calendars/image-rank?image=' + image, target: '_blank'%>
+    </li>
+  <% end %>
+<% end %>

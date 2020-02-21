@@ -1,0 +1,58 @@
+<% if @business.setting_sms.try("#{type}_patterns".to_sym).present?  %>
+  <%= form_tag message_import_path, { method: :post, id: 'filter-for-message', :multipart => true } do %>
+    <%= hidden_field_tag :business_id, @business.try(:id) %>
+    <%= hidden_field_tag :graph_by, params[:graph_by].to_s %>
+    <%= hidden_field_tag :type, type %>
+    <% if type == "email" %>
+      <%= hidden_field_tag :email_import, true %>
+    <% end %>
+    <hr>
+    <label>
+      <%= title %>一斉送信方法(①から順番に対応してください。)
+    </label>
+    <br>
+    <a href="https://faq.ranktoolap.com/hoshikakutokun/hoshikakutokunuse" target="_blank" rel="noopener">
+      操作マニュアルはこちら
+    </a>
+    <br>
+    <p>星カクトくん以外のお役立ちのコンテンツもあります。</p>
+    <br>
+    <br>
+    <p> ①テンプレートダウンロード </p>
+    <%= link_to 'ダウンロード', "/import_#{type}_target.csv" %>
+    <br>
+    <br>
+    <small>※　全項目入力必須です。</small>
+    <br>
+    <small>※　担当者は登録されている方から記入ください。</small>
+    <br>
+    <% if type == "sms" %>
+      <small>※　電話番号はハイフンなしでお願いします。</small>
+      <br>
+    <% end %>
+    <br>
+    <p> ②csvを編集し、ファイルをアップロード </p>
+    <%= file_field_tag :csv_file %>
+    <br>
+    <p> ③ 読み込みをクリックし、対象リストをインポート </p>
+    <%= submit_tag '読み込み', class: "btn btn-sm btn-info" %>
+  <% end %>
+<% else %>
+  <br>
+  <b>
+  <%= title %>送信テンプレートが未設定です。
+  <% if type == "sms" %>
+    <a href="<%= setting_sms_path(business_id:@business.id, content_blank: true) %>">こちら</a>
+  <% elsif type == "email" %>
+    <a href="<%= setting_email_index_path(business_id:@business.id, content_blank: true) %>">こちら</a>
+  <% end %>
+  から設定をお願いします。
+  </b>
+  <br>
+  <br>
+  <a href="https://faq.ranktoolap.com/hoshikakutokun/hoshikakutokunuse" target="_blank" rel="noopener">
+    操作マニュアルはこちら
+  </a>
+  <br>
+  <p>星カクトくん以外のお役立ちのコンテンツもあります。</p>
+<% end %>

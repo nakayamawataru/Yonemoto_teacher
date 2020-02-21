@@ -1,0 +1,45 @@
+<div class="content-business-review">
+  <div class="content-question">
+    <%= form_tag answer_r_path, method: :POST do %>
+      <div class="question-detail">
+        <h4>
+          <div class="alert sec-question">
+            <%= content_qa_review(@business, QaReview::QUESTION_1) %>
+          </div>
+        </h4>
+        <div class="">
+          <label>
+            <input type="radio" class="radio-inline" name="question_1" value="yes" required>
+            <span class="outside"><span class="inside"></span></span>はい
+          </label>
+          <label>
+            <input type="radio" class="radio-inline" name="question_1" value="no" required>
+            <span class="outside"><span class="inside"></span></span>いいえ
+          </label>
+        </div>
+      </div>
+      <div class="question-detail">
+        <h4>
+          <div class="alert sec-question">
+            <%= content_qa_review(@business, QaReview::QUESTION_2) %>
+          </div>
+        </h4>
+        <div class="">
+          <label>
+            <input type="radio" class="radio-inline" name="question_2" value="yes" required>
+            <span class="outside"><span class="inside"></span></span>はい
+          </label>
+          <label>
+            <input type="radio" class="radio-inline" name="question_2" value="no" required>
+            <span class="outside"><span class="inside"></span></span>いいえ
+          </label>
+        </div>
+      </div>
+      <%= hidden_field_tag :business_id, params[:business_id] %>
+      <%= hidden_field_tag :business_type, params[:business_type] %>
+      <div class="question-detail">
+        <button class="btn btn-primary btn-submit">回答する</button>
+      </div>
+    <% end %>
+  </div>
+</div>

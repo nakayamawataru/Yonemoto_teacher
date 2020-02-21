@@ -1,0 +1,8 @@
+<% keyword_reviews.each do |keyword_review| %>
+  <tr>
+    <td><%= keyword_review.reviewer %></td>
+    <td><%= keyword_review.send(word_type) %></td>
+    <td><%= simple_format keyword_review.content %></td>
+    <td><%= keyword_review.create_time.strftime('%Y-%m-%d %H:%M:%S') %></td>
+  </tr>
+<% end %>

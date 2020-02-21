@@ -1,0 +1,46 @@
+<div class="form-group col-md-2 col-sm-6 col-xs-12">
+  <label class="control-label">年月</label>
+  <%= select_tag :month, options_from_collection_for_select(months_views_meo_data(@business), :first, :second, @month), include_blank: "選択する", class: "form-control calendar-filter-select" %>
+</div>
+
+<div class="form-group col-md-2 col-sm-6 col-xs-12">
+  <label class="control-label">3位以内の日数</label>
+  <input type="text" value="<%= @days_within_rank_3 %>日" class="form-control" disabled="true" >
+</div>
+
+<div class="form-group col-md-2 col-sm-6 col-xs-12">
+  <label class="control-label">順位以内指定</label>
+  <%= select_tag :within_rank,
+    options_from_collection_for_select((1..20).map{|n| [n, n.to_s + '位以内'] }.unshift(['all', 'すべて']), :first, :second, @within_rank),
+    class: "form-control calendar-filter-select" %>
+</div>
+
+<% if @business.present? && @business.performance_month_fee.to_i > 0 %>
+  <% unless current_user.agent_setting.try(:super_regional_calendar?) %>
+    <div class="form-group col-md-2 col-sm-6 col-xs-12">
+      <label class="control-label">月額報酬費用（税込）</label>
+      <input type="text" value="<%= number_to_currency(@business.performance_month_fee.to_i, :format => "%u%n", :unit => "￥") %>" class="form-control" disabled="true" >
+    </div>
+  <% end %>
+<% else %>
+  <% unless current_user.agent_setting.try(:super_regional_calendar?) %>
+    <div class="form-group col-md-2 col-sm-6 col-xs-12">
+      <label class="control-label">日額成果報酬費用（税込）</label>
+      <input type="text" value="<%= number_to_currency(@price_by_month, :format => "%u%n", :unit => "￥") %>" class="form-control" disabled="true" >
+    </div>
+  <% end %>
+
+  <div class="form-group col-md-2 col-sm-6 col-xs-12">
+    <label class="control-label">対象月ご請求額（税込）</label>
+    <input type="text" value="<%= number_to_currency(@total_money, :format => "%u%n", :unit => "￥") %>" class="form-control" disabled="true" >
+  </div>
+<% end %>
+
+<% if @business.present? && @month.present? && @within_rank.present? %>
+  <div class="form-group col-md-2 col-sm-6 col-xs-12">
+    <label class="control-label">&nbsp;</label>
+    <%= link_to export_csv_calendars_path(month: @month, within_rank: @within_rank, business_id: @business.id), method: :post, class: '' do %>
+      <button class="btn btn-success form-control">CSV</button>
+    <% end %>
+  </div>
+<% end %>

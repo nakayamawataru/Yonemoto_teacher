@@ -1,0 +1,17 @@
+<div class="nested-fields form-group row">
+  <% value_date = f.object.persisted? ? f.object.date : date %>
+  <div class="col-xs-9">
+    <%= f.text_field :title, class: 'form-control', disabled: f.object.user_id.present? && f.object.user_id != current_user.id %>
+    <%= f.hidden_field :date, value: value_date, class: 'date-memo-business' %>
+    <%= f.hidden_field :user_id, value: f.object.persisted? ? f.object.user_id : current_user.id %>
+  </div>
+  <div class="col-xs-3">
+    <% if f.object.user_id.nil? || f.object.user_id == current_user.id %>
+      <%= link_to_remove_association f, class: 'btn btn-danger' do %>
+        <i class="fa fa-trash"></i>
+      <% end %>
+    <% else %>
+      <%= f.object.user.company %>
+    <% end %>
+  </div>
+</div>

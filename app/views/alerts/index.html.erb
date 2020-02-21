@@ -1,0 +1,83 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/alert' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">急降下一覧</h3>
+        </div>
+        <div class="box-body">
+          <div class="out-rank-select-date">
+            <%= render 'select_date' %>
+          </div>
+          <div class="table table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th class="text-center">日付</th>
+                  <th class="text-center">案件名</th>
+                  <th class="text-center">キワード</th>
+                  <th class="text-center">前日の順位</th>
+                  <th class="text-center">当日の順位</th>
+                  <th class="text-center">順位チャート</th>
+                </tr>
+              </thead>
+              <tbody class="out-rank-list">
+                <%= render "out_rank_item", out_rank_list: @out_rank_list %>
+              </tbody>
+            </table>
+          </div>
+          <div id="pagination_out_rank">
+            <%= paginate @out_rank_list, param_name: :page_out_rank, params: { type: 'out_rank'} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">3位以内にランクインした一覧</h3>
+        </div>
+        <div class="box-body">
+          <div class="top-rank-select-month">
+            <%= render 'select_date_top_rank' %>
+          </div>
+          <div class="table table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th class="text-center">日付</th>
+                  <th class="text-center">案件名</th>
+                  <th class="text-center">キワード</th>
+                  <th class="text-center">前日の順位</th>
+                  <th class="text-center">当日の順位</th>
+                  <th class="text-center">順位チャート</th>
+                </tr>
+              </thead>
+              <tbody class="top-rank-list">
+                <%= render "top_rank_date_item", top_rank_list: @top_rank_list %>
+              </tbody>
+            </table>
+          </div>
+          <div id="pagination">
+            <%= paginate @top_rank_list, param_name: :page_top_rank, params: { type: 'top_rank'} %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="modal modal-loading">
+  <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+    <span class="fa fa-spinner fa-spin fa-3x"></span>
+  </div>
+</div>

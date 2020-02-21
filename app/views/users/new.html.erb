@@ -1,0 +1,21 @@
+<%= render 'content_header' %>
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/users' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">ユーザー作成</h3>
+        </div>
+        <div class="box-body">
+          <%= form_for @user, url: create_user_path, method: :post do |f| %>
+            <%= render 'form', f: f %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

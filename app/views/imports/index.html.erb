@@ -1,0 +1,60 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/imports' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <%= form_tag imports_path, { method: :get, id: 'filter-for-calendar' } do %>
+          <div class="box-header">
+            <div class="form-inline">
+              <label>案件名</label>
+              <% if current_user.owner? && @business.present? %>
+                <span><%= @business.name %></span>
+              <% else %>
+                <div class="business-select-tag">
+                  <%= select_tag :business_id,
+                    options_from_collection_for_select(@businesses, "id", "name", @business.try(:id)),
+                    include_blank: "選択する", class: "form-control calendar-filter-select select-business select2" %>
+                </div>
+              <% end %>
+
+              <%= link_to export_template_imports_path(business_id: @business.id), method: :post do %>
+                <button class="btn btn-success form-control btn-export-rank">
+                  <i class="fa fa-cloud-download" aria-hidden="true"></i> テンプレートCSVダウンロード
+                </button>
+              <% end if @business.present? %>
+            </div>
+          </div>
+        <% end %>
+        <div class="box-body">
+          <% if current_user.admin? && @business.present? %>
+            <div class='export-import-rank'>
+              <small>※　キワードを先に登録してください。</small>
+              <br>
+              <small>※　テンプレートCSVをダウンロードしてください。</small>
+              <br>
+              <small>※　テンプレートCSVにある案件IDとキワードIDに基づいて、既存データを作成してください。</small>
+              <br>
+              <br>
+              <%= form_tag upload_rank_imports_path, method: :post, multipart: true, class: 'form-inline' do %>
+                <%= file_field_tag :rank_file, class: "form-control input-rank-file" %>
+                <button type="submit" class="btn btn-success form-control btn-import-rank">
+                  <i class="fa fa-cloud-upload" aria-hidden="true"></i> 順位CSV Import
+                </button>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="notification-save-content-review wrapper"></div>
+<div class="modal modal-loading">
+  <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+    <span class="fa fa-spinner fa-spin fa-3x"></span>
+  </div>
+</div>

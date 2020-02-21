@@ -1,0 +1,10 @@
+<% locations.each do |location| %>
+  <tr>
+    <td class="text-center">
+      <%= link_to base_location_path(location), class: "btn btn-success", remote: true do %>
+        <i class="fa fa-map-pin"></i>
+      <% end %>
+    </td>
+    <td><%= location.base_address %></td>
+  </tr>
+<% end %>

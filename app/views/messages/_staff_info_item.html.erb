@@ -1,0 +1,9 @@
+<% staffs.each do |staff| %>
+  <tr>
+    <td>
+      <div class="small-face-icon" id="preview-img-<%= staff.id %>" style="background-image:url(<%= staff.image.try(:attached?) ? url_for(staff.image) : '' %>); margin-right: 7px;"></div>
+      <p style="margin-top: 7px;"><%= staff.staffname %></p>
+    </td>
+    <td class="text-center"><%= staff.messages.finished.by_month(@time).count %></td>
+  </tr>
+<% end %>

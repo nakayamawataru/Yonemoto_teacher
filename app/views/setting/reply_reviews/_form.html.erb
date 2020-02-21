@@ -1,0 +1,13 @@
+<div class="form-group">
+  <label><%= title %></label>
+  <%= text_area_tag 'content', review.try(:content).to_s, rows: 3, class: 'form-control' %>
+</div>
+<div class="form-group">
+  <%= check_box_tag 'auto_reply', 1, checked = review.try(:auto_reply) %> 自動返信
+</div>
+<%= hidden_field_tag 'reply_review_id', review.try(:id) %>
+<%= hidden_field_tag 'type_review', type_review %>
+<%= hidden_field_tag 'business_id', @business.try(:id).to_s %>
+<div class="form-group">
+  <button class="btn btn-success btn-reply-review">保存</button>
+</div>

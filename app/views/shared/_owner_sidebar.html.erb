@@ -1,0 +1,56 @@
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <ul class="sidebar-menu" data-widget="tree">
+      <%= render 'shared/owner_sidebar_restricted' unless current_user.gmb_restricted %>
+      <li class="<%= 'active' if controller_name == 'reviews' %>">
+        <%= link_to reviews_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-star"></i>
+          <span>レビュー分析</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'messages' %>">
+        <%= link_to messages_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-envelope"></i>
+          <span><%= display_restricted(current_user) %></span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'coupons' %>">
+        <%= link_to coupons_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-gift"></i>
+          <span>クーポン機能</span>
+        <% end %>
+      </li>
+      <% if can? :manage, Post %>
+        <li class="<%= 'active' if controller_name == 'posts' %>">
+          <%= link_to posts_path(business_id: params[:business_id]) do %>
+            <i class="fa fa-newspaper-o"></i>
+            <span>投稿機能</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="header"></li>
+      <li class="<%= 'active' if request.path_info.include?('setting') %>">
+        <%= link_to setting_qr_index_path do %>
+          <i class="fa fa-cog"></i>
+          <span>設定</span>
+        <% end %>
+      </li>
+      <% if can? :estimate, PaymentsController %>
+        <li class="<%= 'active' if controller_name == 'payments' && params[:action] == 'estimate' %>">
+          <%= link_to estimate_payments_path do %>
+            <i class="fa fa-credit-card"></i>
+            <span>請求情報</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="header"></li>
+      <li>
+        <%= link_to destroy_user_session_path, method: :delete, data: { confirm: "ログアウトしますか？" } do %>
+          <i class="fa fa-sign-out"></i>
+          <span>ログアウト</span>
+        <% end %>
+      </li>
+      <%= render 'shared/owner_sidebar_restricted' if current_user.gmb_restricted %>
+    </ul>
+  </section>
+</aside>

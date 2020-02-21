@@ -1,0 +1,68 @@
+<!-- Main content -->
+<section class="content">
+  <% if @connected_list.any? %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">連携済み</h3>
+          </div>
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Location名（Google Location APIから獲得したデータ）</th>
+                  <th>電話番号</th>
+                  <th>郵便番号</th>
+                </tr>
+              </thead>
+              <tbody class="user-list">
+                <% @connected_list.each do |item| %>
+                  <tr>
+                    <td><%= item[:location_name] %></td>
+                    <td><%= item[:primary_phone] %></td>
+                    <td><%= item[:postal_code] %></td>
+                  </tr>
+                <% end %>
+              </thead>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if @available_list.any? %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">連携可能（未連携）</h3>
+          </div>
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>Location名（Google Location APIから獲得したデータ）</th>
+                  <th>電話番号</th>
+                  <th>郵便番号</th>
+                </tr>
+              </thead>
+              <tbody class="user-list">
+                <% @available_list.each do |item| %>
+                  <tr>
+                    <td><%= item[:location_name] %></td>
+                    <td><%= item[:primary_phone] %></td>
+                    <td><%= item[:postal_code] %></td>
+                  </tr>
+                <% end %>
+              </thead>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>

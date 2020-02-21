@@ -1,0 +1,64 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js' %>
+  <%= javascript_include_tag 'https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels' %>
+  <%= javascript_include_tag 'components/chart' %>
+<% end %>
+
+<!-- <%= render 'content_header' %> -->
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <%= form_tag charts_path, { method: :get, id: 'filter-for-chart' } do %>
+          <div class="box-header">
+            <div class="form-inline">
+              <label>案件名</label>
+              <% if current_user.owner? && @business.present? %>
+                <span><%= @business.name %></span>
+                <input hidden class="business-id" value="<%= @business.id %>"/>
+              <% else %>
+                <div class="business-select-tag">
+                  <%= select_tag :business_id, options_from_collection_for_select(@businesses, "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control chart-select select-business select2" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <div class="box-body">
+            <div class="search-form row">
+              <%= render "filter_form" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <%= render 'infomation_charts' %>
+
+      <% if @business.present? %>
+        <div class="box">
+          <div class="box-body">
+            <canvas id="myChart" width="400" height="150"></canvas>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="box-body">
+            <canvas id="myChartAbs" width="400" height="150"></canvas>
+          </div>
+        </div>
+
+        <% @benchmark_business.each_with_index do |benchmark_business, index| %>
+          <p class="title-benchmark-business"><%= benchmark_business.name %></p>
+          <div class="box">
+            <div class="box-body">
+              <canvas id="benchmarkBusiness<%= index %>" width="400" height="150"></canvas>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+  </div>
+</section>
+
+<%= render "shared/notification_modal" %>

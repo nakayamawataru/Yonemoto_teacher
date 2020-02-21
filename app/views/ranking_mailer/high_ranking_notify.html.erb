@@ -1,0 +1,10 @@
+ビジネス名： <%= @business.name %>
+<br>
+<br>
+<% @keywords_in_top_rank.each do |meo| %>
+  対象キーワード： <%= meo.keyword.value %>
+  <br>
+  順位： <%= meo.rank %>
+  <br>
+  <br>
+<% end %>

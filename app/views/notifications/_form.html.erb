@@ -1,0 +1,30 @@
+<div class="form-group">
+  <%= f.label :content, '本文' %>
+  <%= f.text_area :content, class: "form-control", required: true, rows: 10 %>
+</div>
+<div class="form-group">
+  <label>配信期間</label>
+  <div class="form-inline">
+    <%= f.text_field :start_at, class: "form-control datetimepicker" %> - 
+    <%= f.text_field :end_at, class: "form-control datetimepicker" %>
+  </div>
+</div>
+<div class="form-group">
+  <%= f.label :button_url, 'ボタンURL' %>
+  <%= f.text_field :button_url, class: "form-control", required: true %>
+</div>
+<div class="form-group">
+  <label>表示対象</label>
+  <div>
+    <% Notification::USER_ROLES.each do |role, value| %>
+      <div>
+        <%= f.check_box :user_role, {multiple: true, checked: (f.object.user_role.include?(value.to_s) if f.object.user_role.present?)}, value, nil %>
+        <label for="notification_user_role_<%= value %>" style="font-weight:unset;"><%= t "notifications.user_role.#{role}" %></label>
+      </div>
+    <% end %>
+  </div>
+</div>
+<div class="pull-right">
+  <%= link_to "キャンセル", notifications_path, class: "btn btn-default" %>
+  <%= f.submit "保存", class:"btn btn-success"%>
+</div>

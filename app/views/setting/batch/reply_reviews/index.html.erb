@@ -1,0 +1,55 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/batch_reply_reviews' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <%= render 'shared/setting_sidebar' %>
+    <div class="col-md-9 col-sm-9">
+      <div class="box">
+        <div class="box-header">
+          <b>口コミ自動返信設定（バッチ設定）</b>
+        </div>
+        <div class="box-body batch-form">
+          <div class="form-group">
+            <label>会社</label>
+            <%= select_tag :user_ids, options_from_collection_for_select(User.accessible_by(current_ability), "id", "company"),
+              class: "form-control select2 multi-user-select", multiple: true %>
+          </div>
+          <br>
+          <div class="panel panel-default">
+            <div class="panel-heading"><b>メッセージあり</b></div>
+            <div class="panel-body">
+              <form id="less-two-form">
+                <%= render partial: 'form', locals: { title: '星２以下の返信文', review: nil,
+                  type_review: 'less_two_stars', index: 1 } %>
+              </form>
+              <hr>
+              <form id="less-three-form">
+                <%= render partial: 'form', locals: { title: '星３以上への返信文', review: nil,
+                  type_review: 'greater_three_stars', index: 2 } %>
+              </form>
+            </div>
+          </div>
+
+          <div class="panel panel-default">
+            <div class="panel-heading"><b>メッセージなし</b></div>
+            <div class="panel-body">
+              <form id="greater-two-nc-form">
+                <%= render partial: 'form', locals: { title: '星２以下の返信文', review: nil,
+                  type_review: 'less_two_stars_no_comment', index: 3 } %>
+              </form>
+              <hr>
+              <form id="greater-three-nc-form">
+                <%= render partial: 'form', locals: { title: '星３以上への返信文', review: nil,
+                  type_review: 'greater_three_stars_no_comment', index: 4 } %>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="notification-save-content-review wrapper"></div>

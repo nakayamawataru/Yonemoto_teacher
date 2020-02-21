@@ -1,0 +1,58 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="form-inline">
+            <label>案件名</label>
+            <span><%= business.name %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label pull-left">キーワード最高順位</label>
+            </div>
+          </div>
+          
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label">対策月</label>
+              <span><%= month_rank %></span>
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <% begin_month = (month_rank + '-01').to_date %>
+          <table class="table table-bordered detail-report">
+            <thead>
+              <tr>
+                <th class="th-report">キーワード最高順位</th>
+                <th class="th-report text-left">先月</th>
+                <th class="th-report text-left"><%= begin_month.to_date.strftime('%m') %>月</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% business.keywords.each do |keyword| %>
+                <% max_rank_last_month = keyword.max_rank_in_month(begin_month - 1.day).to_i %>
+                <% max_rank_current_month = keyword.max_rank_in_month(begin_month).to_i %>
+                <tr>
+                  <td class="text-left"><%= keyword.try(:value) %></td>
+                  <td class="text-left <%= report_class_rank(max_rank_last_month) %>"><%= report_rank_as_text(max_rank_last_month) %></td>
+                  <td class="text-left <%= report_class_rank(max_rank_current_month) %>"><%= report_rank_as_text(max_rank_current_month) %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

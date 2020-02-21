@@ -1,0 +1,26 @@
+<% if @notification.present? %>
+  <div id="notification-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-close">✕</div>
+      <div class="modal-header">
+        <h3>お知らせ</h3>
+      </div>
+      <div class="modal-body">
+        <%= simple_format @notification.content %>
+      </div>
+      <div class="modal-footer">
+        <%= link_to @notification.button_url, target: '_blank' do %>
+          <button type="button" class="modal-link">詳しくはコチラ</button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    $(function () {
+      if ("<%= @notification_cookie.exclude? current_user.id %>" == "true") {
+        $('#notification-modal').show();
+      }
+    });
+  </script>
+<% end %>

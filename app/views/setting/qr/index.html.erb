@@ -1,0 +1,75 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/qr' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <%= render 'shared/setting_sidebar' %>
+
+    <div class="col-md-9 col-sm-9">
+      <div class="box">
+        <div class="box-header"><b>QRコード設定</b></div>
+        <div class="box-body">
+          <%= form_tag setting_qr_index_path, { method: :get } do %>
+            <div class="form-inline">
+              <label>案件名</label>
+              <div class="business-select-tag">
+                <%= select_tag :business_id, options_from_collection_for_select(Business.accessible_by(current_ability), "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control select-business select2", onchange: "this.form.submit();" %>
+              </div>
+            </div>
+          <% end %>
+          <br>
+          <% if @business.present? %>
+            <%= form_tag setting_init_qr_path(business_id: @business) do  %>
+              <div class="form-group">
+                <label class="control-label">QRコードタイプ</label>
+                <%= select_tag :qr_type, options_from_collection_for_select(@qr_types, :first, :second, params[:qr_type]), class: 'form-control select-qr-type' %>
+              </div>
+              <%= submit_tag '保存', class: 'btn btn-success' %>
+            <% end %>
+            <br>
+            <div class="display-qr simple-qr-image">
+              <% if @business.simple_qr.try(:image).try(:attached?) %>
+                <label>QRコード画像</label>
+                <br>
+                <%= image_tag @business.simple_qr.image %>
+                <br>
+                <%= link_to 'ダウンロード', rails_blob_path(@business.simple_qr.image, disposition: 'attachment'), class: 'btn btn-success' %>
+              <% end %>
+            </div>
+
+            <div class="display-qr anonymous-qr-image">
+              <% if @business.anonymous_qr.try(:image).try(:attached?) %>
+                <label>QRコード画像</label>
+                <br>
+                <%= image_tag @business.anonymous_qr.image %>
+                <br>
+                <%= link_to 'ダウンロード', rails_blob_path(@business.anonymous_qr.image, disposition: 'attachment'), class: 'btn btn-success' %>
+              <% end %>
+            </div>
+
+            <div class="display-qr normal-qr-image">
+              <% if @business.normal_qr.try(:image).try(:attached?) %>
+                <label>QRコード画像</label>
+                <br>
+                <%= image_tag @business.normal_qr.image %>
+                <br>
+                <%= link_to 'ダウンロード', rails_blob_path(@business.normal_qr.image, disposition: 'attachment'), class: 'btn btn-success' %>
+              <% end %>
+            </div>
+
+            <div class="display-qr sms-qr-image">
+              <% if @business.sms_qr.try(:image).try(:attached?) %>
+                <label>QRコード画像</label>
+                <br>
+                <%= image_tag @business.sms_qr.image %>
+                <br>
+                <%= link_to 'ダウンロード', rails_blob_path(@business.sms_qr.image, disposition: 'attachment'), class: 'btn btn-success' %>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

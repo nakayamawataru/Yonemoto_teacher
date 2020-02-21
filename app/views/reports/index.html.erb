@@ -1,0 +1,32 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/reports' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <%= form_tag reports_path, { method: :get, id: 'report_form' } do %>
+          <div class="box-header">
+            <div class="form-inline">
+              <label>案件名</label>
+              <% if current_user.owner? && @business.present? %>
+                <span><%= @business.name %></span>
+              <% else %>
+                <div class="business-select-tag">
+                  <%= select_tag :business_id, options_from_collection_for_select(@businesses, "id", "name", @business.try(:id)),
+                    include_blank: "選択する", class: "form-control report-filter-select select-business select2" %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+  <% if @business%>
+    <%= render 'insight'%>
+    <%= render 'rank'%>
+  <% end %>
+</section>

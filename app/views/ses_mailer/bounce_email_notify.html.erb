@@ -1,0 +1,9 @@
+<p>新しいバウンスメールが追加されました</p>
+<p>
+  <% @new_emails.each do |email| %>
+    ・<%= email %><br/>
+  <% end %>
+</p>
+<a href="<%= ENV.fetch('DOMAIN', 'http://localhost:3000') %>/setting/ses_blacklist_emails">
+  <%= ENV.fetch('DOMAIN', 'http://localhost:3000') %>/setting/ses_blacklist_emails
+</a>

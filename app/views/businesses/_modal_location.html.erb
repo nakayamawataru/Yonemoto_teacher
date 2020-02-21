@@ -1,0 +1,43 @@
+<div class="modal" tabindex="-1" role="dialog" id="business-locations">
+  <div class="modal-dialog modal-lg" role="document">
+    <%= form_for business , url: connect_google_location_business_path(business), method: :put do |f| %>
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <h5 class="modal-title">ビジネス選択</h5>
+        </div>
+        <div class="modal-body" style= "min-height: 300px">
+          <% if locations.present? %>
+            <div class="form-group">
+              <%= select_tag :location_id, options_for_select(locations.collect{ |l| [ l['locationName'], l['name'].split('/').last ] }), prompt: '選択する', include_blank: true, class: "form-control select2-locations", required: true %>
+            </div>
+            <div style="color: red">
+              ※ドロップダウンから連携したいビジネスを検索して選択してください
+            </div>
+          <% else %>
+            <div class="no-data">
+              ビジネス情報がありません
+            </div>
+          <% end %>
+        </div>
+        <div class="modal-footer">
+          <% if locations.present? %>
+            <%= f.submit "選択", class: "btn btn-primary" %>
+          <% end %>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript">
+  $(function() {
+    $('#business-locations').modal({backdrop: 'static'})
+    $(".select2-locations").select2({
+      dropdownParent: $("#business-locations")
+    })
+  });
+</script>

@@ -1,0 +1,196 @@
+.content-business-review {
+  background-color: #fff;
+  max-width: 600px;
+  min-height: 100vh;
+  margin: auto;
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .question {
+    text-align: center;
+    font-weight: bold;
+    font-size: 20px;
+  }
+
+  .answer {
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    margin-top: 30px;
+
+    small {
+      margin: auto;
+      margin-top: -22px;
+      margin-bottom: 20px;
+    }
+
+    .btn-pf {
+      text-align: center;
+      margin-bottom: 25px;
+
+      img {
+        width: 40%;
+        cursor: pointer;
+      }
+    }
+
+    .btn-pf-yahoo {
+      img {
+        margin-top: -5px;
+        width: 50%;
+      }
+    }
+
+    .btn-pf-instagram {
+      img {
+        width: 45%;
+        margin-top: -10px;
+        margin-bottom: -5px;
+      }
+    }
+
+    .btn {
+      margin-bottom: 20px !important;
+    }
+
+    .btn-yes {
+      width: 80%;
+      margin: auto;
+      height: 50px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 38px;
+    }
+
+    .btn-no {
+      width: 80%;
+      margin: auto;
+      height: 50px;
+      color: #333;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 38px;
+    }
+  }
+
+  .content-question {
+    padding: 30px;
+
+    .question-detail {
+      text-align: center;
+
+      .sec-question {
+        border: 1px solid #ccc;
+      }
+
+      label {
+        margin: 2em;
+        display: inline-block;
+        position: relative;
+        padding-left: 40px;
+        cursor: pointer;
+      }
+
+      input {
+        height: 1px;
+        width: 1px;
+        opacity: 0;
+      }
+
+      .outside {
+        display: inline-block;
+        position: absolute;
+        left: 0;
+        top: 50%;
+        margin-top: -10px;
+        width: 20px;
+        height: 20px;
+        border: 2px solid #3CB371;
+        border-radius: 50%;
+        -webkit-box-sizing: border-box;
+                box-sizing: border-box;
+        background: none;
+      }
+
+      .inside {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+                transform: translate(-50%, -50%);
+        display: inline-block;
+        border-radius: 50%;
+        width: 10px;
+        height: 10px;
+        background: #3CB371;
+        left: 3px;
+        top: 3px;
+        -webkit-transform: scale(0, 0);
+                transform: scale(0, 0);
+      }
+      .no-transforms .inside {
+        left: auto;
+        top: auto;
+        width: 0;
+        height: 0;
+      }
+
+      input:checked + .outside .inside {
+        -webkit-animation: radio-select 0.1s linear;
+                animation: radio-select 0.1s linear;
+        -webkit-transform: scale(1, 1);
+                transform: scale(1, 1);
+      }
+      .no-transforms input:checked + .outside .inside {
+        width: 10px;
+        height: 10px;
+      }
+    }
+
+    .btn-submit {
+      margin-top: 30px;
+    }
+  }
+
+  .content-review {
+    text-align: center;
+
+    form {
+      margin-top: -20px;
+    }
+
+    .btn-redirect {
+      width: 80%;
+      margin: auto;
+      height: 50px;
+      color: #fff;
+      font-weight: bold;
+      font-size: 18px;
+      line-height: 38px;
+      margin-bottom: 20px;
+    }
+
+    .text-review {
+      width: 80%;
+      padding: 10px;
+      font-size: 16px;
+    }
+  }
+
+  .logo-business-revivew {
+    text-align: center;
+
+    img {
+      width: 50%;
+      margin-bottom: 30px;
+    }
+
+    .gmail {
+      width: 30%;
+    }
+  }
+}

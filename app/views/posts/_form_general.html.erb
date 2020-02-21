@@ -1,0 +1,62 @@
+<label>投稿種類</label>
+<div class="form-group">
+  <label class="radio-inline">
+    <%= f.radio_button :post_type, :what_news, checked: true, class: 'post-type',
+      checked: params[:post_type] == 'what_news' && params[:error].present? || @post.what_news? %> 最新情報
+  </label>
+  <label class="radio-inline">
+    <%= f.radio_button :post_type, :event, class: 'post-type',
+      checked: params[:post_type] == 'event' && params[:error].present? || @post.event? %> イベント
+  </label>
+  <label class="radio-inline">
+    <%= f.radio_button :post_type, :coupon, class: 'post-type',
+      checked: params[:post_type] == 'coupon' && params[:error].present? || @post.coupon? %> クーポン（特典）
+  </label>
+</div>
+<div class="form-group">
+  <label class='chb-auto-post'>
+    <%= f.check_box :auto_post, class: 'auto-post' %> 予約投稿
+  </label>
+</div>
+<div class="form-group">
+  <%= f.label :time_post, '予約投稿日時' %>
+  <div class='input-group date' id='time_post'>
+    <span class="input-group-addon">
+      <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+    <%= f.text_field :time_post, class: "form-control time-post",
+      value: @post.time_post ? @post.time_post.strftime('%d/%m/%Y %H:%M') : '',
+      autocomplete: 'off', disabled: !@post.auto_post %>
+  </div>
+  <small class="error-time-post">予約投稿日時を指定してください</small>
+  <% if params[:error].try(:[], :time_post).present? %>
+    <ul class='tm-validation-errors'>
+      <li class='tm-validation-error-message'>予約投稿日時を指定してください</li>
+    </ul>
+  <% end %>
+</div>
+<div class="form-group">
+  <label>投稿内容</label>
+  <%= f.text_area :summary, rows: 3, class: "form-control" %>
+  <% if params[:error].try(:[], :summary).present? %>
+    <ul class='tm-validation-errors'>
+      <li class='tm-validation-error-message'>投稿内容<%= params[:error][:summary].first %></li>
+    </ul>
+  <% end %>
+</div>
+<div class="form-group">
+  <%= f.label :image, '画像' %>
+  <%= f.file_field :image, class: "form-control" %>
+  <%= hidden_field_tag 'remove_image', 1 %>
+</div>
+<div class="image-post" style="display: <%= @post.try(:image_url) ? "" : "none" %>">
+  <div class="image_preview">
+    <img src="<%= @post.try(:image_url) %>">
+  </div>
+  <div>
+    <div class="btn btn-danger delete-post">
+      <i class="fa fa-trash-o"></i>
+    </div>
+  </div>
+</div>
+<%= f.hidden_field :business_id, value: @business.id %>

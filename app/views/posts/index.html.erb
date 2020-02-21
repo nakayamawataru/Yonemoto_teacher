@@ -1,0 +1,59 @@
+<%= render 'content_header' %>
+
+<section class="content">
+  <% if can? :manage, Post %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body">
+            <%= form_tag posts_path, { method: :get, class: 'col-md-6 col' } do %>
+              <div class="form-inline">
+                <label>案件名</label>
+                <div class="business-select-tag">
+                  <%= select_tag :business_id, options_from_collection_for_select(Business.accessible_by(current_ability), "id", "name", @business.try(:id)),
+                    include_blank: "選択する", class: "form-control select-business select2", onchange: "this.form.submit()", style: "width: 100%" %>
+                </div>
+              </div>
+            <% end %>
+          </div>
+
+          <% if @business %>
+            <div class="box-header">
+              <%= link_to new_post_path(business_id: @business.id), class: "btn btn-success" do %>
+                <i class="fa fa-plus"></i>
+                <span>登録</span>
+              <% end %>
+            </div>
+            <div class="box-body">
+              <div class="table table-responsive">
+                <table class="table table-bordered table-striped tbl-list-post">
+                  <thead>
+                    <tr>
+                      <th class="text-center"></th>
+                      <th class="text-center">投稿種類</th>
+                      <th class="text-center">投稿内容</th>
+                      <th class="text-center">画像</th>
+                      <th class="text-center">予約投稿</th>
+                      <th class="text-center">予約投稿日時</th>
+                      <th class="text-center">ステータス</th>
+                    </tr>
+                  </thead>
+                  <tbody class="post-list">
+                    <%= render @posts %>
+                  </tbody>
+                </table>
+              </div>
+              <br>
+              <div id="page-entries-info">
+                <%= page_entries_info @posts, entry_name: '項目' %>
+              </div>
+              <div id="pagination">
+                <%= paginate @posts %>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>

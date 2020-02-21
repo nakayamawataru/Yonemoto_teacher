@@ -1,0 +1,132 @@
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">今月請求予定額</h3>
+          <% if (can? :index, PaymentsController) && @user.payment_active? %>
+            <%= link_to user_remove_card_path( @user), method: :delete, class: "btn btn-danger pull-right", data: { confirm:"本当に削除しますか？" } do %>
+              <i class="fa fa-trash"></i> カード登録解除
+            <% end %>
+          <% end %>
+        </div>
+        <div class="box-body">
+          <% if plan = @user.try!(:plan) %>
+            <% init_price = plan.init_price.to_i %>
+            <% month_price = plan.calc_month_fee(@user).to_i %>
+            <% review_price = 0 %>
+            <br>
+            <%= plan.try!(:name) %>：
+            <br>
+            　└ 初期費用： <%= number_to_currency(init_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+            　└ 月額費用： <%= number_to_currency(month_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+            　　　 (小計)： <%= number_to_currency(init_price + month_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+          <% end %>
+
+          <% if message_plan = @user.try!(:check_message_plan) %>
+            <% review_price = message_plan[1].to_i %>
+            <%= message_plan[0] %>：　<%= number_to_currency(review_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+          <% end %>
+          契約日： <%= @user.payed_at(true).strftime('%Y/%m/%d') %>
+          <br>
+
+          <hr>
+          値引： <%= number_to_currency(@user.payment_discount, :format => "%u%n", :unit => "￥") %>
+          <% if can? :update_payment_discount, @user %>
+            <i class="fa fa-pencil-square-o edit-payment-discount" data-toggle="modal" data-target="#edit_payment_discount" aria-hidden="true">編集</i>
+          <% end %>
+          <br>
+          <% amount = init_price + month_price + review_price %>
+          <% actual_amount = amount * @user.rate_payment(true) - @user.payment_discount %>
+          合計： <%= number_to_currency(amount, :format => "%u%n", :unit => "￥") %>
+            (日割り計算のため <%= number_to_currency(actual_amount > 0 ? actual_amount : 0, :format => "%u%n", :unit => "￥") %>で算出)
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if @payments.present? %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">決済履歴</h3>
+          </div>
+          <div class="box-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th>日付</th>
+                  <th>合計金額</th>
+                  <th>内訳</th>
+                  <th>ステータス</th>
+                  <th>備考</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody class="user-list">
+                <% @payments.each do |payment| %>
+                  <tr>
+                    <td><%= payment.payed_at.strftime('%Y年%m月') %></td>
+                    <td><%= number_to_currency(payment.amount.to_i, :format => "%u%n", :unit => "￥") %></td>
+                    <td>
+                      初期費用： <%= number_to_currency(payment.init_price.to_i, :format => "%u%n", :unit => "￥") %>
+                      <br>
+                      月額費用： <%= number_to_currency(payment.month_price.to_i, :format => "%u%n", :unit => "￥") %>
+                      <br>
+                      星カクトくん： <%= number_to_currency(payment.review_price.to_i, :format => "%u%n", :unit => "￥") %>
+                    </td>
+                    <td><%= convert_payment_status payment.status %></td>
+                    <td><%= simple_format payment.note %></td>
+                    <td><%= link_to '編集', edit_payment_url(payment.id, user_id: @user.id) %></td>
+                  </tr>
+                <% end %>
+              </thead>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% else %>
+    <div class="row">
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-body">
+            <p> 決済履歴はありません。 </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</section>
+
+<% if can? :update_payment_discount, @user %>
+  <div class="modal fade" id="edit_payment_discount" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">割引編集</h4>
+        </div>
+        <%= form_tag update_payment_discount_users_path do %>
+          <div class="modal-body">
+            <div class="form-group">
+              <label class="control-label">値引</label>
+              <%= number_field_tag :payment_discount, @user.payment_discount, { class: 'form-control' } %>
+              <%= hidden_field_tag :user_id, @user.id %>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <%= submit_tag '送信', class: 'btn btn-success' %>
+            <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,29 @@
+<% reviews.each do |review| %>
+  <div class="detail-review">
+    <div class="star">
+      <font color="#f39c12"><%= render_stars(review.star_rating) %></font>
+      <span class="date-review">
+        <%= review.create_time.strftime('%Y/%m/%d') %>
+      </span>
+    </div>
+    <div class="content-review">
+    <% if review.content.length > 100 %>
+      <%= truncate(review.content, length: 100) %>
+      <%= link_to 'もっと見る', '', class: "read-more-#{review.id}" %>
+      <script>
+        $('.read-more-<%= review.id %>').on('click', function(e) {
+          e.preventDefault()
+          $(this).parent().html('<%= escape_javascript review.content %>')
+        })
+      </script>
+    <% else %>
+      <%= review.content %>
+    <% end %>
+    </div>
+    <div class="review-by">
+      <span class="date-review">
+       <%= review.reviewer %> / Googleから投稿
+      </span>
+    </div>
+  </div>
+<% end %>

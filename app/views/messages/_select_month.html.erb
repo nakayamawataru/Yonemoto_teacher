@@ -1,0 +1,15 @@
+<% if @time.beginning_of_month > 6.months.ago.beginning_of_month %>
+  <%= link_to '< 先月',
+    messages_path(business_id: params[:business_id].to_s, time: (@time - 1.months)),
+    class: 'pull-left', remote: true %>
+<% else %>
+  <div></div>
+<% end %>
+<h4>スタッフ別（<%= @time.strftime("%Y年%m月") %>）</h4>
+<% if @time.beginning_of_month < Date.today.beginning_of_month %>
+  <%= link_to '次月 >',
+    messages_path(business_id: params[:business_id].to_s, time: (@time + 1.months)),
+    class: 'pull-right', remote: true %>
+<% else %>
+  <div></div>
+<% end %>

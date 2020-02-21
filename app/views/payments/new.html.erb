@@ -1,0 +1,158 @@
+<script type="text/javascript" src="https://js.pay.jp/"></script>
+<script type="text/javascript">Payjp.setPublicKey("<%= ENV["PAYJP_PUBLIC_KEY"] %>");</script>
+
+<div class="login-box">
+  <div class="login-logo">
+    <h2 style="color: white">
+      決済
+    </h2>
+  </div>
+  <div class="login-box-body">
+    <% if current_user.payment_active? %>
+      <p class="login-box-msg">クレジットカード登録済です</p>
+    <% else %>
+      <form method="POST" action="/payment" id="charge-form">
+        <%= hidden_field_tag :authenticity_token, form_authenticity_token %>
+        <p class="login-box-msg">決済情報を入力してください。</p>
+        <div class="form-group has-feedback">
+          <label class="control-label">
+            クレジットカード
+            <span class="detail-plan" data-toggle="modal" data-target="#plan_modal"><i class="fa fa-question-circle" aria-hidden="true"></i></span>
+          </label>
+          <%= select_tag "plan_id", options_from_collection_for_select(@plans, :id, :name, current_user.plan_id),
+            { :prompt => '選択する', class: "plan_id form-control", required: true }  %>
+          <small>料金は「？」をクリックして確認できます</small>
+        </div>
+        <p class="text-danger plan-errors">プランを選択してください。</p>
+        <div class="form-group has-feedback">
+          <div class="plan-restricted">
+            <div class="first-restricted">
+              <label class="checkbox-inline">
+                <%= check_box_tag :restricted, true, !current_user.try(:restricted) %> 星カクトくん
+              </label>
+              <label class="checkbox-inline">
+                <%= check_box_tag :manual_reply_reviews_restricted, true, !current_user.try(:manual_reply_reviews_restricted) %> 口コミ手動返信を開放
+              </label>
+              <label class="checkbox-inline">
+                <%= check_box_tag :auto_post_restricted, true, !current_user.try(:auto_post_restricted) %> 投稿機能を開放
+              </label>
+            </div>
+            <div class="second-restricted">
+              <label class="checkbox-inline">
+                <%= check_box_tag :coupon_restricted, true, !current_user.try(:coupon_restricted) %> クーポン
+              </label>
+              <label class="checkbox-inline">
+                <%= check_box_tag :auto_reply_reviews_restricted, true, !current_user.try(:auto_reply_reviews_restricted) %> 口コミ自動返信を開放
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <p class="login-box-msg">決済情報を入力してください。</p>
+        <div class="form-group has-feedback">
+          <label class="control-label">クレジットカード</label>
+          <input type="text" class="number form-control" name="number" autocomplete="cc-number" maxlength="16" placeholder="カード番号" required="true">
+        </div>
+        <div class="form-group has-feedback">
+          <input type="text" class="cvc form-control" name="cvc" autocomplete="cc-exp"  maxlength="3" placeholder="CVC" required="true">
+        </div>
+
+        <div class="form-group has-feedback">
+          <label class="control-label">有効期限</label>
+          <div class="row">
+            <div class="col-xs-6">
+              <input type="text" class="exp_year form-control" name="exp_year" autocomplete="cc-year"  maxlength="4" placeholder="年" required="true">
+            </div>
+            <div class="col-xs-6">
+              <input type="text" class="exp_month form-control" name="exp_month" autocomplete="cc-month"  maxlength="2" placeholder="月" required="true">
+            </div>
+          </div>
+          <br>
+          <p class="text-danger payment-errors"></p>
+          </div>
+          <label class="checkbox-inline">
+            <%= check_box_tag :terms_payment, true %>
+            <%= link_to '利用規約', 'https://meo.tryhatch.co.jp/kiyakumatome', target: '_blank', rel: 'noreferrer' %> に同意して会員登録をする</p>
+          </label>
+          <p class="text-danger terms-errors">利用規約に同意してください</p>
+          <button type="submit" class="btn btn-success btn-block btn-flat">クレジットカード登録</button>
+          <hr class="hr-footer-payment">
+          <div class="footer-payment">
+            <div class="login">
+              <%= link_to 'ログアウト', destroy_user_session_path, method: :delete %>
+            </div>
+          </div>
+        </div>
+      </form>
+    <% end %>
+  </div>
+</div>
+
+<div class="modal-plan-detail">
+  <div class="modal fade" id="plan_modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="btn-close-guide-payment">
+          <i class="fa fa-times" aria-hidden="true"></i>
+        </div>
+        <%= image_tag image_url('plan.png'), class: 'image-powered', alt: "Tryhatch" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal modal-loading">
+  <div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+    <span class="fa fa-spinner fa-spin fa-3x"></span>
+  </div>
+</div>
+
+<script>
+  (function() {
+    $("#charge-form").submit(function(event) {
+      event.preventDefault();
+
+      var form = $("#charge-form")
+      var number = form.find('input[name="number"]')[0]
+      var cvc = form.find('input[name="cvc"]')[0]
+      var exp_month = form.find('input[name="exp_month"]')[0]
+      var exp_year = form.find('input[name="exp_year"]')[0]
+      var plan = form.find('select[name="plan_id"]').val()
+      var aggree_terms = form.find('input[name="terms_payment"]').is(":checked")
+
+      if(!aggree_terms) {
+        $('.terms-errors').show();
+      } else if (plan == "" || plan == "6") {
+        $('.terms-errors').hide();
+        $('.plan-errors').show();
+      } else {
+        $('.terms-errors').hide();
+        $('.plan-errors').hide();
+        form.find("input[type=submit]").prop("disabled", true);
+        var card = { number: number.value, cvc: cvc.value, exp_month: exp_month.value, exp_year: exp_year.value };
+
+        Payjp.createToken(card, function(s, response) {
+          if (response.error) {
+            form.find('.payment-errors').text(response.error.message);
+            form.find('button').prop('disabled', false);
+          }
+          else {
+            $(".number").removeAttr("name");
+            $(".cvc").removeAttr("name");
+            $(".exp_month").removeAttr("name");
+            $(".exp_year").removeAttr("name");
+            var token = response.id;
+
+            form.append($('<input type="hidden" name="payjpToken" />').val(token));
+            form.get(0).submit();
+            $('.modal-loading').css('display', 'block')
+          }
+        });
+      }
+    });
+
+    $('.btn-close-guide-payment').on('click', function() {
+      $('#plan_modal').modal('toggle');
+    })
+  })();
+</script>

@@ -1,0 +1,47 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/session' %>
+<% end %>
+
+<div class="login-box">
+  <div class="login-logo">
+      <h2 style="color: white">
+        ログイン
+      </h2>
+  </div>
+  <div class="login-box-body">
+    <p class="login-box-msg">ログイン情報を入力してください。</p>
+    <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <div class="form-group has-feedback">
+        <label class="control-label">メールアドレス</label>
+        <%= f.email_field :email, autofocus: true, autocomplete: "email", class:"form-control" %>
+        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+      </div>
+      <div class="form-group has-feedback">
+        <label class="control-label">パスワード</label>
+        <%= f.password_field :password, autocomplete: "current-password", class:"form-control" %>
+        <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+      </div>
+      <div class="row">
+        <div class="col-xs-8">
+          <div class="checkbox icheck">
+            <label>
+              <%= f.check_box :remember_me %>次回から自動的にログイン
+            </label>
+          </div>
+        </div>
+        <div class="col-xs-4">
+          <%= f.submit "ログイン", class:"btn btn-success btn-block btn-flat" %>
+        </div>
+      </div>
+      <p class="d-none direct-link text-center"><%= link_to "10日間無料でデモ登録", new_user_registration_path, class: '' %></p>
+
+      <!-- TODO: login Google -->
+      <!-- <div class="social-auth-links text-center">
+        <p>- または -</p>
+        <%= link_to user_google_oauth2_omniauth_authorize_path, class: 'btn btn-block btn-social btn-google' do %>
+          <span class="fa fa-google"></span>Googleでログイン
+        <% end %>
+      </div> -->
+    <% end %>
+  </div>
+</div

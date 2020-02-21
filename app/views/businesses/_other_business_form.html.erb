@@ -1,0 +1,41 @@
+<div class="form-group">
+  <label><small>Yahoo!プレイス</small></label>
+  <%= f.text_field :yahoo_place_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :yahoo_place_url %>
+</div>
+
+<div class="form-group">
+  <label><small>エキテン</small></label>
+  <%= f.text_field :ekiten_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :ekiten_url %>
+</div>
+
+<div class="form-group">
+  <label><small>Instagram</small></label>
+  <%= f.text_field :instagram_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :instagram_url %>
+</div>
+
+<div class="form-group">
+  <label><small>Facebook</small></label>
+  <%= f.text_field :facebook_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :facebook_url %>
+</div>
+
+<div class="form-group">
+  <label><small>ホットペッパー</small></label>
+  <%= f.text_field :hotpepper_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :hotpepper_url %>
+</div>
+
+<div class="form-group">
+  <label><small>E-PARK</small></label>
+  <%= f.text_field :e_park_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :e_park_url %>
+</div>
+
+<div class="form-group">
+  <label><small>どのアカウントも持っていないユーザーに対するURL</small></label>
+  <%= f.text_field :default_review_url, placeholder: "", class: "form-control" %>
+  <%= show_errors @business, :default_review_url %>
+</div>

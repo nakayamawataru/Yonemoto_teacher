@@ -1,0 +1,47 @@
+<br>
+<p> ④  「<%= lists.count %>」件インポートされました。問題なければ「送信」をおしてください </p>
+<small>インポート件数がおかしい場合は、再度csvを修正し、アップロードしなおしてください。</small>
+<br>
+<br>
+<%= form_for @message, method: :post do |f| %>
+  <%= hidden_field_tag :csv_lists, lists.to_json  %>
+  <%= hidden_field_tag :business_id, @business.try(:id)  %>
+  <div class="form-group">
+    <label class="control-label">パータン</label>
+    <%= f.select "#{type}_pattern_id".to_sym,
+      options_from_collection_for_select(@business.setting_sms.send("#{type}_patterns"), 'id', 'name'),
+      { include_blank: "選択する" }, class: "form-control csv-#{type}-pattern-select", required: true %>
+  </div>
+  <div class="form-group csv-<%= type %>-content-message">
+    <label for="content">内容</label>
+    <textarea class="form-control csv-<%= type %>-pattern-content" rows="5" disabled>
+    </textarea>
+  </div>
+  <%= submit_tag '実行', class: "btn btn-sm btn-info"  %>
+  <br>
+  <br>
+  <small>
+    ※　送信予定日時を入れていただいた場合は即時送信されません。
+  </small>
+<% end %>
+<br>
+<div class="table table-responsive">
+  <table class="table table-bordered table-striped sendhistory">
+    <thead>
+      <tr>
+        <th>名前</th>
+        <% if type == "sms" %>
+          <th class="text-center">電話番号</th>
+        <% elsif type == "email" %>
+          <th class="text-center">メール</th>
+        <% end %>
+        <th class="text-center">担当者</th>
+        <th class="text-center">送信予定日時</th>
+      </tr>
+    </thead>
+
+    <tbody class="message-list">
+      <%= render "csv_list_item", lists: lists, type: type %>
+    </tbody>
+  </table>
+</div>

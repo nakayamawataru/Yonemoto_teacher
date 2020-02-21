@@ -1,0 +1,13 @@
+meo_history:
+  rank_in_top: 3
+  out_of_range: 21
+service:
+  name: "MEOチェキ"
+insights:
+  range_months: 3
+  range_year: 12
+  display_after: 4
+sms_review:
+  slug_lengh: 6
+reviews:
+  bad_rating: 2

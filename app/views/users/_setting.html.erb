@@ -1,0 +1,13 @@
+<% if @user.is_agent? %>
+  <div class="form-group">
+    <%= f.label :setting_calendar, 'カレンダーの表示パターン' %>
+    <%= f.select :setting_calendar, options_from_collection_for_select(User.setting_calendars.keys.to_a.collect{|s| [s, setting_calendar_as_text(s)]},
+      :first, :second, selected: @user.try(:setting_calendar)), {}, {:class => "form-control"} %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :setting_memo, 'メモの表示パターン' %>
+    <%= f.select :setting_memo, options_from_collection_for_select(User.setting_memos.keys.to_a.collect{|s| [s, setting_memo_as_text(s)]},
+      :first, :second, selected: @user.try(:setting_memo)), {}, {:class => "form-control"} %>
+  </div>
+<% end %>

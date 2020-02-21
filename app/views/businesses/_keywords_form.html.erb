@@ -1,0 +1,27 @@
+<% if current_user.demo_user? %>
+  <%= content_for :additional_script do %>
+    <%= javascript_include_tag 'components/keyword' %>
+  <% end %>
+<% end %>
+
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>値</th>
+      <th>作成日時</th>
+      <th class="text-center">編集</th>
+    </tr>
+  </thead>
+  <tbody class="keywords-list">
+    <%= f.fields_for :keywords do |ff| %>
+      <%= render "keyword_fields", f: ff %>
+    <% end %>
+  </tbody>
+</table>
+<p>
+  <%= link_to_add_association f, :keywords, data: {"association-insertion-node" => "tbody.keywords-list", "association-insertion-method" => "append"}, class: 'btn btn-success' do %>
+    <i class="fa fa-plus"></i>
+    <span>登録</span>
+  <% end %>
+</p>

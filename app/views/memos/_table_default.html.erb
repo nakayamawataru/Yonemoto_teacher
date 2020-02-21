@@ -1,0 +1,16 @@
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th class="text-center col-md-2">日付</th>
+      <th class="text-center">表示順位</th>
+      <th class="text-center">前日比</th>
+      <th class="text-center">キーワード</th>
+      <th class="text-center">検索住所</th>
+      <th class="text-center">操作</th>
+    </tr>
+  </thead>
+
+  <tbody class="memo-list">
+    <%= render "memo_item", memos: @memos %>
+  </tbody>
+</table>

@@ -1,0 +1,68 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="form-inline">
+            <label>案件名</label>
+            <span><%= business.name %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label pull-left">検索インサイト分析</label>
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <table class="table table-bordered detail-report">
+            <thead>
+              <tr>
+                <th class="th-report">検索数</th>
+                <th class="th-report">間接</th>
+                <th class="th-report">直接</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= (first_month_from + '-1').to_date.strftime('%Y年%m月') + ' 〜 ' + (first_month_to + '-1').to_date.strftime('%Y年%m月') %></td>
+                <td class="text-right"><%= number_with_delimiter(first_queries_indirect) %></td>
+                <td class="text-right"><%= number_with_delimiter(first_queries_direct) %></td>
+              </tr>
+              <tr>
+                <td><%= (second_month_from + '-1').to_date.strftime('%Y年%m月') + ' 〜 ' + (second_month_to + '-1').to_date.strftime('%Y年%m月') %></td>
+                <td class="text-right"><%= number_with_delimiter(second_queries_indirect) %></td>
+                <td class="text-right"><%= number_with_delimiter(second_queries_direct) %></td>
+              </tr>
+              <tr>
+                <td>上昇率</td>
+                <td class="text-right">
+                  <% if first_queries_indirect > 0 %>
+                    <%= number_with_delimiter((second_queries_indirect.to_f/first_queries_indirect * 100).round(2)) %>%
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
+                <td class="text-right">
+                  <% if first_queries_direct > 0 %>
+                    <%= number_with_delimiter((second_queries_direct.to_f/first_queries_direct * 100).round(2)) %>%
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

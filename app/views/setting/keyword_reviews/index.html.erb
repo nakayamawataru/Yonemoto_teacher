@@ -1,0 +1,66 @@
+<section class="content">
+  <div class="row">
+    <%= render 'shared/setting_sidebar' %>
+
+    <div class="col-md-9 col-sm-9">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">キーワードレビュー一覧</h3>
+        </div>
+        <div class="box-body">
+          <div class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+              <% if current_user.admin? %>
+                <li class="<%= 'active' if @word_type == 'positive' %>"><a href="<%= setting_keyword_reviews_path(word_type: 'positive') %>">ポジティブワード</a></li>
+                <li class="<%= 'active' if @word_type == 'negative' %>"><a href="<%= setting_keyword_reviews_path(word_type: 'negative') %>">ネガティブワード</a></li>
+              <% end %>
+              <li class="<%= 'active' if @word_type == 'whitelist' %>"><a href="<%= setting_keyword_reviews_path(word_type: 'whitelist') %>">除外ワード</a></li>
+            </ul>
+            <div class="tab-content">
+              <div class="tab-pane active">
+                <div class="table table-responsive">
+                  <table class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>ワード</th>
+                        <% if current_user.admin? %>
+                          <th>タイプ</th>
+                        <% end %>
+                        <th>操作</th>
+                      </tr>
+                    </thead>
+                    <tbody class="keyword_review-list">
+                      <%= render "keyword_review_item", keyword_reviews: @keyword_reviews %>
+                    </tbody>
+                    <tbody>
+                      <tr>
+                        <%= form_for [:setting, KeywordReview.new], method: :post do |f| %>
+                          <td><%= f.text_field :value, class: 'form-control' %></td>
+                          <% if current_user.admin? %>
+                            <td><%= f.select :word_type, options_for_select(KeywordReview.word_types.keys, @word_type), {}, class: 'form-control' %></td>
+                          <% else %>
+                            <%= f.hidden_field :word_type, value: @word_type %>
+                            <%= f.hidden_field :user_id, value: current_user.id %>
+                          <% end %>
+                          <td>
+                            <%= f.submit '保存', class: "btn btn-success" %>
+                          </td>
+                        <% end %>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div id="page-entries-info">
+                    <%= page_entries_info @keyword_reviews, entry_name: '項目' %>
+                  </div>
+                  <div id="pagination">
+                    <%= paginate @keyword_reviews %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

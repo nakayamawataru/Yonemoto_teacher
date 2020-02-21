@@ -1,0 +1,110 @@
+<div class="row">
+  <div class="col-xs-12">
+    <div class="box">
+      <div class="box-header">
+        <%= form_tag reports_path, method: :GET do %>
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label pull-left">検索インサイト分析</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label">集計期間：開始</label>
+              <div class='input-group date' id='datepicker_first_month_from'>
+                <input type="text" name="first_month_from" class="form-control" autocomplete="off" value="<%= @first_month_from %>" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label">終了</label>
+              <div class='input-group date' id='datepicker_first_month_to'>
+                <input type="text" name="first_month_to" class="form-control" autocomplete="off" value="<%= @first_month_to %>" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label">集計期間：開始</label>
+              <div class='input-group date' id='datepicker_second_month_from'>
+                <input type="text" name="second_month_from" class="form-control" autocomplete="off" value="<%= @second_month_from %>" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+            <div class="form-group col-md-3 col-xs-12">
+              <label class="control-label">終了</label>
+              <div class='input-group date' id='datepicker_second_month_to'>
+                <input type="text" name="second_month_to" class="form-control" autocomplete="off" value="<%= @second_month_to %>" required />
+                <span class="input-group-addon">
+                  <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <%= hidden_field_tag :business_id, @business.try(:id) || params[:business_id] %>
+          <%= hidden_field_tag :month_rank, @month_rank %>
+          <div class="row">
+            <div class="form-group col-md-6 col-xs-12">
+              <button class="btn btn-success">実行</button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="box-body">
+        <% if @first_month_from.present? &&  @first_month_to.present? && @second_month_from.present? && @second_month_to.present? %>
+          <table class="table table-bordered detail-report">
+            <thead>
+              <tr>
+                <th class="th-report">検索数</th>
+                <th class="th-report">間接</th>
+                <th class="th-report">直接</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><%= (@first_month_from + '-1').to_date.strftime('%Y年%m月') + ' 〜 ' + (@first_month_to + '-1').to_date.strftime('%Y年%m月') %></td>
+                <td class="text-right"><%= number_with_delimiter(@first_queries_indirect) %></td>
+                <td class="text-right"><%= number_with_delimiter(@first_queries_direct) %></td>
+              </tr>
+              <tr>
+                <td><%= (@second_month_from + '-1').to_date.strftime('%Y年%m月') + ' 〜 ' + (@second_month_to + '-1').to_date.strftime('%Y年%m月') %></td>
+                <td class="text-right"><%= number_with_delimiter(@second_queries_indirect) %></td>
+                <td class="text-right"><%= number_with_delimiter(@second_queries_direct) %></td>
+              </tr>
+              <tr>
+                <td>上昇率</td>
+                <td class="text-right">
+                  <% if @first_queries_indirect > 0 %>
+                    <%= number_with_delimiter((@second_queries_indirect.to_f/@first_queries_indirect * 100).round(2)) %>%
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
+                <td class="text-right">
+                  <% if @first_queries_direct > 0 %>
+                    <%= number_with_delimiter((@second_queries_direct.to_f/@first_queries_direct * 100).round(2)) %>%
+                  <% else %>
+                    -
+                  <% end %>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="margin-top: 10px;">
+            <%= link_to "PDF出力", download_pdf_reports_path(type: 'insight', business_id: params[:business_id], first_month_from: params[:first_month_from], first_month_to: params[:first_month_to],
+              second_month_from: params[:second_month_from], second_month_to: params[:second_month_to]), class: "btn btn-success" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

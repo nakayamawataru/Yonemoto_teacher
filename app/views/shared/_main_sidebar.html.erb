@@ -1,0 +1,149 @@
+<aside class="main-sidebar">
+  <section class="sidebar">
+    <ul class="sidebar-menu" data-widget="tree">
+      <li class="<%= 'active' if controller_name == 'businesses' %>">
+        <%= link_to businesses_path do %>
+          <i class="fa fa-briefcase"></i> <span>GMB一覧</span>
+        <% end %>
+      </li>
+      <% unless current_user.is_user? %>
+        <li class="<%= 'active' if controller_name == 'users' %>">
+          <%= link_to users_path do %>
+            <i class="fa fa-users"></i> <span>ユーザー</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="<%= 'active' if controller_name == 'base_locations' %>">
+        <%= link_to base_locations_path do %>
+          <i class="fa fa-map"></i> <span>住所指定検索</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'charts' && params[:action] == 'chart_category' %>">
+        <%= link_to chart_category_charts_path do %>
+          <i class="fa fa-line-chart"></i> <span>平均順位統計</span>
+        <% end %>
+      </li>
+      <li class="header"></li>
+      <li class="<%= 'active' if controller_name == 'charts' && params[:action] != 'chart_category' %>">
+        <%= link_to charts_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-line-chart"></i>
+          <span>順位チャート</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'memos' %>">
+        <%= link_to memos_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-sticky-note"></i> <span>メモ一覧</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'calendars' %>">
+        <%= link_to calendars_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-calendar"></i>
+          <span>カレンダー順位</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'reports' %>">
+        <%= link_to reports_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-file-text-o"></i>
+          <span>レポート</span>
+        <% end %>
+      </li>
+      <% if can? :index, ImportsController %>
+        <li class="<%= 'active' if controller_name == 'imports' %>">
+          <%= link_to imports_path(business_id: params[:business_id]) do %>
+            <i class="fa fa-cloud-upload"></i>
+            <span>順位データImport</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="<%= 'active' if controller_name == 'insights' && params[:action] != 'export' %>">
+        <%= link_to insights_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-bar-chart"></i>
+          <span>Googleインサイト</span>
+        <% end %>
+      </li>
+      <% if can? :index, AlertsController %>
+        <li class="<%= 'active' if controller_name == 'alerts' %>">
+          <%= link_to alerts_path do %>
+            <i class="fa fa-bell"></i>
+            <span>急降下一覧</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="<%= 'active' if controller_name == 'exports_csv' %>">
+        <%= link_to exports_csv_index_path do %>
+          <i class="fa fa-cloud-download"></i>
+          <span>CSV出力</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'insights' && params[:action] == 'export' %>">
+        <%= link_to export_csv_insights_path do %>
+          <i class="fa fa-cloud-download"></i>
+          <span>インサイトデータ</span>
+        <% end %>
+      </li>
+      <% if can? :index, CalculatePaymentAmountsController %>
+        <li class="<%= 'active' if controller_name == 'calculate_payment_amounts' %>">
+          <%= link_to calculate_payment_amounts_path do %>
+            <i class="fa fa-money"></i>
+            <span>3位以内の日数合計</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="header"></li>
+      <li class="<%= 'active' if controller_name == 'reviews' %>">
+        <%= link_to reviews_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-star"></i>
+          <span>レビュー分析</span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'messages' %>">
+        <%= link_to messages_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-envelope"></i>
+          <span><%= display_restricted(current_user) %></span>
+        <% end %>
+      </li>
+      <li class="<%= 'active' if controller_name == 'coupons' %>">
+        <%= link_to coupons_path(business_id: params[:business_id]) do %>
+          <i class="fa fa-gift"></i>
+          <span>クーポン機能</span>
+        <% end %>
+      </li>
+      <% if can? :manage, Post %>
+        <li class="<%= 'active' if controller_name == 'posts' %>">
+          <%= link_to posts_path(business_id: params[:business_id]) do %>
+            <i class="fa fa-newspaper-o"></i>
+            <span>投稿機能</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li class="header"></li>
+      <li class="<%= 'active' if request.path_info.include?('setting') %>">
+        <%= link_to setting_qr_index_path do %>
+          <i class="fa fa-cog"></i>
+          <span>設定</span>
+        <% end %>
+      </li>
+      <% if can? :estimate, PaymentsController %>
+        <li class="<%= 'active' if controller_name == 'payments' && params[:action] == 'estimate' %>">
+          <%= link_to estimate_payments_path do %>
+            <i class="fa fa-credit-card"></i>
+            <span>請求情報</span>
+          <% end %>
+        </li>
+      <% end %>
+      <% if can? :manage, Notification %>
+        <li class="<%= 'active' if controller_name == 'notifications' %>">
+          <%= link_to notifications_path do %>
+            <i class="fa fa-bell"></i> <span>お知らせ</span>
+          <% end %>
+        </li>
+      <% end %>
+      <li>
+        <%= link_to destroy_user_session_path, method: :delete, data: { confirm: "ログアウトしますか？" } do %>
+          <i class="fa fa-sign-out"></i>
+          <span>ログアウト</span>
+        <% end %>
+      </li>
+    </ul>
+  </section>
+</aside>

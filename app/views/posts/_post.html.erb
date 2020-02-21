@@ -1,0 +1,24 @@
+<tr>
+  <td style="text-align:center;">
+    <%= link_to post_path(post, business_id: @business.id), class: 'btn btn-success' do %>
+      <i class="fa fa-search"></i>
+    <% end %>
+    <% unless post.successed? %>
+      <%= link_to edit_post_path(post, business_id: @business.id), class: "btn btn-success" do %>
+        <i class="fa fa-pencil"></i>
+      <% end %>
+    <% end %>
+  </td>
+  <td class="text-center"><%= post_type_as_text(post.post_type) %></td>
+  <td class="text-center"><%= simple_format post.summary %></td>
+  <td class="text-center post-image-show"><%= image_tag post.image_url.to_s %></td>
+  <td class="text-center">
+    <% if post.auto_post %>
+      <i class="fa fa-check"></i>
+    <% else %>
+      <i class="fa fa-times"></i>
+    <% end %>
+  </td>
+  <td class="text-center"><%= post.time_post ? post.time_post.strftime('%Y/%m/%d %H:%M') : '' %></td>
+  <td class="text-center"><%= post_status_as_text(post.status) %></td>
+</tr>

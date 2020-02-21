@@ -1,0 +1,52 @@
+<% if current_user.gmb_restricted %>
+  <li class="header" style="color: red;">※　ご契約いただいたプランでは、<br>　 以下はご利用できません</li>
+<% end %>
+<li class="<%= 'active' if controller_name == 'base_locations' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : base_locations_path) do %>
+    <i class="fa fa-map"></i> <span>住所指定検索</span>
+  <% end %>
+</li>
+<li class="<%= 'active' if controller_name == 'charts' && params[:action] == 'chart_category' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : chart_category_charts_path) do %>
+    <i class="fa fa-line-chart"></i> <span>平均順位統計</span>
+  <% end %>
+</li>
+<li class="<%= 'active' if controller_name == 'charts' && params[:action] != 'chart_category' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : charts_path(business_id: params[:business_id])) do %>
+    <i class="fa fa-line-chart"></i>
+    <span>順位チャート</span>
+  <% end %>
+</li>
+<li class="<%= 'active' if controller_name == 'calendars' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : calendars_path(business_id: params[:business_id])) do %>
+    <i class="fa fa-calendar"></i>
+    <span>カレンダー順位</span>
+  <% end %>
+</li>
+<li class="<%= 'active' if controller_name == 'reports' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : reports_path(business_id: params[:business_id])) do %>
+    <i class="fa fa-file-text-o"></i>
+    <span>レポート</span>
+  <% end %>
+</li>
+<li class="d-none <%= 'active' if controller_name == 'imports' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : imports_path(business_id: params[:business_id])) do %>
+    <i class="fa fa-cloud-upload"></i>
+    <span>順位データImport</span>
+  <% end %>
+</li>
+<li class="<%= 'active' if controller_name == 'insights' && params[:action] != 'export' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : insights_path(business_id: params[:business_id])) do %>
+    <i class="fa fa-bar-chart"></i>
+    <span>Googleインサイト</span>
+  <% end %>
+</li>
+<li class="<%= 'active' if controller_name == 'insights' && params[:action] == 'export' %>">
+  <%= link_to (current_user.gmb_restricted ? '#' : export_csv_insights_path) do %>
+    <i class="fa fa-cloud-download"></i>
+    <span>インサイトデータ</span>
+  <% end %>
+</li>
+<% unless current_user.gmb_restricted %>
+  <li class="header"></li>
+<% end %>

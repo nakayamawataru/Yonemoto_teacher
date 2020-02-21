@@ -1,0 +1,9 @@
+<div class="content-business-review">
+  <div class="content-review">
+    <%= form_tag send_feedback_r_path(id: @business.bid), method: :POST do %>
+      <label for="Feedback">コメント</label>
+      <textarea rows="8" class='text-review' id="review" name="feedback"></textarea>
+      <button class="btn btn-primary btn-submit">投稿する</button>
+    <% end %>
+  </div>
+</div>

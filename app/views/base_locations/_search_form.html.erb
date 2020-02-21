@@ -1,0 +1,12 @@
+<%= search_form_for @search, url: base_locations_path, html: { method: :get } do |f| %>
+  <div class="col-md-12">
+    <div class="form-group col-md-12 col-xs-12">
+      <label class="control-label">住所</label>
+      <%= f.text_field :base_address_cont, class: 'form-control' %>
+    </div>
+
+    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+      <%= submit_tag "検索", class: 'btn btn-success' %>
+    </div>
+  </div>
+<% end %>

@@ -1,0 +1,45 @@
+<%= render 'content_header' %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">住所検索</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="search-form row">
+            <%= render "search_form" %>
+          </div>
+        </div>
+      </div>
+      
+      <div class="box">
+        <div class="box-body">
+          <div class="table table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th class="text-center">操作</th>
+                  <th class="text-center">住所</th>
+                </tr>
+              </thead>
+
+              <tbody class="location-list">
+                <%= render "location_item", locations: @locations %>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <div id="page-entries-info">
+            <%= page_entries_info @locations, entry_name: '項目' %>
+          </div>
+          <div id="pagination">
+            <%= paginate @locations %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

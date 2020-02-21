@@ -1,0 +1,60 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <% if can? :index, ReviewsController %>
+        <div class="box">
+          <div class="box-header">
+            <h3 class="box-title">口コミ分析詳細</h3>
+          </div>
+          <div class="box-body">
+            <div class="table table-responsive">
+              <table class="table table-bordered table-hover">
+                <tbody>
+                  <tr role="row">
+                    <th>口コミ分析ID</th>
+                    <td><%= @review.review_id %></td>
+                  </tr>
+
+                  <tr role="row">
+                    <th>案件名</th>
+                    <td><%= @review.business.name %></td>
+                  </tr>
+
+                  <tr role="row">
+                    <th>ユーザ名</th>
+                    <td><%= @review.reviewer %></td>
+                  </tr>
+
+                  <tr role="row">
+                    <th>評価</th>
+                    <td><font color="#f39c12"><%= render_stars(@review.star_rating) %></font></th>
+                  </tr>
+
+                  <tr role="row">
+                    <th>コメント</th>
+                    <td><%= simple_format @review.content %></td>
+                  </tr>
+
+                  <tr role="row">
+                    <th>投稿日時</th>
+                    <td><%= @review.create_time.strftime('%Y-%m-%d %H:%M:%S') %></td>
+                  </tr>
+
+                  <tr role="row">
+                    <th>返信内容</th>
+                    <td><%= @review.reply_content %></td>
+                  </tr>
+
+                  <tr role="row">
+                    <th>返信日時</th>
+                    <td><%= @review.reply_update_time.strftime('%Y-%m-%d %H:%M:%S') if @review.reply_update_time.present? %></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</section>

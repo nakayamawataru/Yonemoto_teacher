@@ -1,0 +1,22 @@
+<%= render 'content_header' %>
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/posts' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-body">
+          <div class="form-group">
+            <label>案件名</label>
+            <div><%= @business.name %></div>
+          </div>
+          <%= form_for @post, url: post_path, method: :put do |f| %>
+            <%= render 'form', f: f %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

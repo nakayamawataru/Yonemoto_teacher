@@ -1,0 +1,14 @@
+<%= render 'form_general', f: f %>
+<div class="post-event-form <%= params[:error].present? ? params[:post_type] == 'what_news' ? 'd-none' : '' : @post.what_news? ? 'd-none' : '' %>">
+  <%= render 'event', f: f %>
+</div>
+
+<div class="post-action-types <%= params[:error].present? ? params[:post_type] == 'coupon' ? 'd-none' : '' : @post.coupon? ? 'd-none' : '' %>">
+  <%= render 'action_type', f: f %>
+</div>
+
+<%= render 'form_coupon', f: f %>
+<div class="pull-right">
+  <%= link_to "キャンセル", posts_path(business_id: @business.id), class:  "btn btn-default" %>
+  <%= f.submit "保存", class: "btn btn-success btn-submit-post"%>
+</div>

@@ -1,0 +1,139 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/reviews' %>
+<% end %>
+<%= render 'content_header' %>
+
+<section class="content">
+  <% if can? :index, ReviewsController %>
+    <div class="row">
+      <% if @business.present? %>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-google"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">クチコミ平均値</span>
+              <% avg_rate = @business.average_rating %>
+              <span class="info-box-number"><%= avg_rate %> <font color="#f39c12"><%= render_stars(avg_rate) %></font></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-comments"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">クチコミ総数</span>
+              <span class="info-box-number"><%= @reviews.total_count %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-calendar"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">今月のクチコミ数</span>
+              <span class="info-box-number"><%= @business.reviews.cur_month.count %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-thumbs-o-up"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">ポジティブワード</span>
+              <span class="info-box-number"><%= @business.reviews.is_positive.count %></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-2 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-green"><i class="fa fa-thumbs-o-down"></i></span>
+            <div class="info-box-content">
+              <span class="info-box-text">ネガティブワード</span>
+              <span class="info-box-number"><%= @business.reviews.is_negative.count %></span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+
+      <div class="col-xs-12">
+        <div class="box">
+          <div class="box-header">
+            <div class="row">
+              <%= form_tag reviews_path, { method: :get, id: 'filter-for-review', class: 'col-md-6 col' } do %>
+                <div class="form-inline">
+                  <label>案件名</label>
+                  <% if current_user.owner? && @business.present? %>
+                    <span><%= @business.name %></span>
+                    <input hidden class="business-id" value="<%= @business.id %>"/>
+                  <% else %>
+                    <div class="business-select-tag">
+                      <%= select_tag :business_id, options_from_collection_for_select(Business.accessible_by(current_ability), "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control select-business select2", onchange: "this.form.submit()", style: "width: 100%" %>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+              <div class="col-md-6">
+                <% if @business.present? %>
+                  <%= link_to fetch_review_path(@business), class: 'btn btn-success pull-right' do %>
+                    <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                    <span>データを取得する</span>
+                  <% end %>
+
+                  <%= form_tag export_csv_reviews_path, { method: :GET, class: 'pull-right' } do %>
+                    <div class="form-inline">
+                      <label>CSV種類</label>
+                      <%= hidden_field_tag :business_id, @business.id %>
+                      <%= select_tag :type_comment, options_for_select([['ポジティブ', 'positive'], ['ネガティブ', 'negative']], params[:type_comment]),
+                        include_blank: "全て", class: "form-control", style: "margin-right: 5px" %>
+                      <button class="btn btn-success" style="margin-right: 5px;">
+                        <i class="fa fa-file-o"></i> CSVファイル出力
+                      </button>
+                    </div>
+                  <% end %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+          <div class="box-body">
+            <% unless @reviews.blank? %>
+              <div class="table table-responsive">
+                <table class="table table-bordered table-hover">
+                  <thead>
+                    <tr role="row">
+                      <th style="text-align: center; width: 133px;">操作</th>
+                      <th style="text-align: center; width: 271px;">ユーザ名</th>
+                      <th style="text-align: center; width: 185px;">評価</th>
+                      <th style="text-align: center; width: 205px;">コメント</th>
+                      <th style="text-align: center; width: 303px;">返信</th>
+                    </tr>
+                  </thead>
+                  <tbody class="review-list">
+                    <%= render "review_item", reviews: @reviews %>
+                  </tbody>
+                </table>
+              </div>
+              <div id="page-entries-info">
+                <%= page_entries_info @reviews, entry_name: '項目' %>
+              </div>
+              <div id="pagination">
+                <%= paginate @reviews %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+      <%= render 'review_positives' if @positive_reviews.present? %>
+      <%= render 'review_negatives' if @negative_reviews.present? %>
+
+    </div>
+  <% end %>
+</section>
+
+<%= render 'reply_review_modal' %>
+<div class="notification-save-reply-review wrapper"></div>
+
+<%= render "shared/notification_modal" %>

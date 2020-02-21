@@ -1,0 +1,60 @@
+<div class="nav-tabs-custom">
+  <ul class="nav nav-tabs">
+    <li class="active"><a href="#tab_1" data-toggle="tab">基本情報</a></li>
+    <li><a href="#tab_2" data-toggle="tab">キーワード</a></li>
+    <li><a href="#tab_3" data-toggle="tab">店舗ユーザー</a></li>
+    <li><a href="#tab_4" data-toggle="tab">Google</a></li>
+    <li><a href="#tab_5" data-toggle="tab">Google以外の連携</a></li>
+    <li><a href="#tab_6" data-toggle="tab">ベンチマークGMB</a></li>
+    <li><a href="#tab_7" data-toggle="tab">登録履歴</a></li>
+  </ul>
+  <div class="tab-content">
+    <div class="tab-pane active" id="tab_1">
+      <%= render 'info_form', f: f %>
+    </div>
+
+    <div class="tab-pane" id="tab_2">
+      <%= render 'keywords_form', f: f %>
+    </div>
+
+    <div class="tab-pane" id="tab_3">
+      <%= render 'owner_form', f: f %>
+    </div>
+
+    <div class="tab-pane" id="tab_4">
+      <%= render 'other_form', f: f %>
+    </div>
+
+    <div class="tab-pane" id="tab_5">
+      <%= render 'other_business_form', f: f %>
+    </div>
+
+    <div class="tab-pane" id="tab_6">
+      <%= render 'benchmark_business_form', f: f %>
+    </div>
+
+    <div class="tab-pane" id="tab_7">
+      <%= render 'register_history', f: f %>
+    </div>
+  </div>
+</div>
+<div class="pull-right">
+  <%= link_to "キャンセル", businesses_path, class: "btn btn-default" %>
+  <% if @business.persisted? %>
+    <%= link_to user_google_oauth2_omniauth_authorize_path, class: "btn btn-success" do %>
+      <i class="fa fa-google"></i>
+      <span>GMB連携</span>
+    <% end %>
+  <% end %>
+  <%= f.submit "保存", class:"btn btn-success"%>
+</div>
+<br>
+<br>
+<br>
+<div class="pull-right">
+  GMB新規作成後、「保存」ボタンの左に
+  「GMB連携」が表示されます。
+  <br>
+  こちらからGMB連携お願い致します。
+  GMB連携完了後、順位計測可能です。
+</div>

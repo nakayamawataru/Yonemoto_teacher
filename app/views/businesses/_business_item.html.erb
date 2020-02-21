@@ -1,0 +1,41 @@
+<% businesses.each do |business| %>
+  <tr class="list-business">
+    <td class="text-center" style="width: 40px">
+      <%= link_to charts_path(business_id: business.id), class: "btn btn-success" do %>
+        <i class="fa fa-line-chart"></i>
+      <% end %>
+    </td>
+    <td class="text-center" style="width: 40px">
+      <%= link_to calendars_path(business_id: business.id), class: "btn btn-success" do %>
+        <i class="fa fa-calendar-check-o"></i>
+      <% end %>
+    </td>
+    <td class="text-center" style="width: 40px">
+      <%= link_to insights_path(business_id: business.id), class: "btn btn-success" do %>
+        <i class="fa fa-area-chart"></i>
+      <% end %>
+    </td>
+    <td class="text-center" style="width: 40px">
+      <%= link_to reviews_path(business_id: business.id), class: "btn btn-success" do %>
+        <i class="fa fa-commenting-o"></i>
+      <% end %>
+    </td>
+    <td class="text-center"><%= convert_status(business.status) %></td>
+    <% unless current_user.is_user? %>
+      <td>
+        <%= link_to edit_user_path(business.user_id) do %>
+          <%= business.user_id %> - <%= business.user.email %>
+        <% end %>
+      </td>
+    <% end %>
+    <td class="text-center"><%= link_to business.name, edit_business_path(business) %></td>
+    <td class="text-center"><%= business.base_address %></td>
+    <td class="text-center"><%= business.category_business.primary.first&.category&.name.to_s %></td>
+    <td class="list-addition-business">
+      <ul>
+        <%= business.category_business.addition.map{ |c| "<li>#{c.category&.name.to_s}</li>" }.join().html_safe %>
+      </ul>
+    </td>
+    <td class="text-center"><%= business.place_id.present? ? '○' : '☓' %></td>
+  </tr>
+<% end %>

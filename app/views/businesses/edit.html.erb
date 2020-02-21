@@ -1,0 +1,29 @@
+<%= render 'content_header' %>
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/businesses' %>
+<% end %>
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">GMB編集</h3>
+          <% if can? :destroy, @business %>
+            <%= link_to business_path(@business), method: :delete, class: "btn btn-danger pull-right", data: { confirm:"本当に削除しますか？" } do %>
+              <i class="fa fa-trash"></i>
+            <% end %>
+          <% end %>
+        </div>
+        <div class="box-body">
+          <%= form_for @business, method: :put do |f| %>
+            <%= render 'form', f: f %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% if @locations.kind_of?(Array) %>
+    <%= render 'modal_location', locations: @locations, business: @business %>
+  <% end %>
+</section>

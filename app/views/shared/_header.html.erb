@@ -1,0 +1,48 @@
+<header class="main-header">
+  <% if current_user.gmb_restricted? %>
+    <a href="<%= root_path %>" class="logo">
+      <span class="logo-mini"><b>H</b></span>
+      <span class="logo-lg">
+        <% if url_header_logo.present?  %>
+          <%= image_tag url_header_logo, class:"" %>
+        <% elsif current_user.nested_owner_present? %>
+          <span><%= current_user.nested_owner_name %></span>
+        <% else %>
+          <%= image_tag 'hoshi_logo.png', class:"" %>
+        <% end %>
+      </span>
+    </a>
+  <% else %>
+    <a href="<%= root_path %>" class="logo">
+      <span class="logo-mini"><b>G</b></span>
+      <span class="logo-lg">
+        <% if url_header_logo.present?  %>
+          <%= image_tag url_header_logo, class:"" %>
+        <% elsif current_user.nested_owner_present? %>
+          <span><%= current_user.nested_owner_name %></span>
+        <% else %>
+          <%= image_tag 'logo_header.png', class:"" %>
+        <% end %>
+      </span>
+    </a>
+  <% end %>
+  <nav class="navbar navbar-static-top">
+    <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
+      <span class="sr-only">Toggle navigation</span>
+    </a>
+    <% if manager? %>
+      <div class="form-group col-md-4 col-sm-6 col-xs-10 view-as-user-select">
+        <%= select_tag :user_id_eq,
+          options_from_collection_for_select(
+            user_can_views, "id", "display_name_for_dropdown", selected: current_user.id),
+            { class: "form-control select2 view-as" } %>
+      </div>
+    <% elsif current_user.expire_at.present? && !current_user.payment_active? %>
+      <div class="col-md-4 col-sm-6 col-xs-10 link-payment">
+        <%= link_to payment_path do %>
+          デモ期間終了まであと<%= current_user.demo_remained_date %>日。こちらからアップグレード
+        <% end %>
+      </div>
+    <% end %>
+  </nav>
+</header>

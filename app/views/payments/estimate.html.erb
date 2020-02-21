@@ -1,0 +1,45 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">今月請求予定額</h3>
+        </div>
+        <div class="box-body">
+          <% if plan = current_user.try!(:plan) %>
+            <% init_price = plan.init_price.to_i %>
+            <% month_price = plan.calc_month_fee(current_user).to_i %>
+            <% review_price = 0 %>
+            <br>
+            <%= plan.try!(:name) %>：
+            <br>
+            　└ 初期費用： <%= number_to_currency(init_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+            　└ 月額費用： <%= number_to_currency(month_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+            　　　 (小計)： <%= number_to_currency(init_price + month_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+          <% end %>
+
+          <% if message_plan = current_user.try!(:check_message_plan) %>
+            <% review_price = message_plan[1].to_i %>
+            <%= message_plan[0] %>：　<%= number_to_currency(review_price, :format => "%u%n", :unit => "￥") %>
+            <br>
+          <% end %>
+          契約日： <%= current_user.payed_at(true).strftime('%Y/%m/%d') %>
+          <br>
+
+          <hr>
+          値引： <%= number_to_currency(current_user.payment_discount, :format => "%u%n", :unit => "￥") %>
+          <% amount = init_price + month_price + review_price - current_user.payment_discount %>
+          合計： <%= number_to_currency(amount, :format => "%u%n", :unit => "￥") %>
+            (日割り計算のため <%= number_to_currency(amount * current_user.rate_payment(true), :format => "%u%n", :unit => "￥") %>で算出)
+
+          <div class="payment-guide pull-right">
+            <%= link_to '契約について', 'https://faq.ranktoolap.com/guide', target: '_blank', rel: 'noreferrer' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

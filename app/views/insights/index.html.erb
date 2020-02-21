@@ -1,0 +1,214 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js' %>
+  <%= javascript_include_tag 'components/insight' %>
+<% end %>
+
+<!-- <%= render 'content_header' %> -->
+
+<section class="content">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="box">
+        <div class="box-header">
+          <div class="row">
+            <%= form_tag insights_path, { method: :get, class: 'col-md-6' } do %>
+              <div class="form-inline">
+                <label>案件名</label>
+                <% if current_user.owner? && @business.present? %>
+                  <span><%= @business.name %></span>
+                <% else %>
+                  <div class="business-select-tag">
+                    <%= select_tag :business_id, options_from_collection_for_select(@businesses, "id", "name", @business.try(:id)), include_blank: "選択する", class: "form-control select-business select2", onchange: "this.form.submit()" %>
+                  </div>
+                <% end %>
+              </div>
+            <% end %>
+
+            <div class="col-md-6">
+              <% if @business.present? && can?(:fetch, Insight) %>
+                <%= link_to fetch_insight_path(@business), { class: 'btn btn-success pull-right', 'data-confirm': "インサイトデータを強制に取得しますか？" } do %>
+                  <i class="fa fa-cloud-download" aria-hidden="true"></i>
+                  <span>データを取得する</span>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="box-body">
+          <% if @business.present? %>
+            <% if Time.now < @display_day %>
+              <p>※<%= 1.months.ago.month %>月のインサイトデータは<%= @display_day.day %>日以降に表示されます</p>
+            <% end %>
+            <div class="nav-tabs-custom">
+              <ul class="nav nav-tabs">
+                <li class="active"><a href="#tab_1" data-toggle="tab">１・３ヶ月</a></li>
+                <li><a href="#tab_2" data-toggle="tab">１年間</a></li>
+              </ul>
+              <div class="tab-content">
+                <div class="tab-pane active" id="tab_1">
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-pie-chart"></i>
+                          <h3 class="box-title"><%= @current_month_title %></h3>
+                          <div class="pull-right box-tools">
+                            <!--<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target=".modal-search" title="説明"><i class="fa fa-question"></i></button> -->
+                          </div>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="doughnut-chart-one" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_months_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chart-one" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-pie-chart"></i>
+                          <h3 class="box-title"><%= @current_month_title %></h3>
+                          <div class="pull-right box-tools">
+                            <!--<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target=".modal-search" title="説明"><i class="fa fa-question"></i></button> -->
+                          </div>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="doughnut-chart-two" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_months_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chart-two" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-pie-chart"></i>
+                          <h3 class="box-title"><%= @current_month_title %></h3>
+                          <div class="pull-right box-tools">
+                            <!--<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target=".modal-search" title="説明"><i class="fa fa-question"></i></button> -->
+                          </div>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="doughnut-chart-three" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_months_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chart-three" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-pie-chart"></i>
+                          <h3 class="box-title"><%= @current_month_title %></h3>
+                          <div class="pull-right box-tools">
+                            <!--<button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target=".modal-search" title="説明"><i class="fa fa-question"></i></button> -->
+                          </div>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="doughnut-chart-four" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_months_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chart-four" style="height: 385px; width: 539px; display: block;" width="539" height="385" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="tab_2">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_year_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chartone-year" style="height: 385px; width: 0px; display: block;" width="0" height="0" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_year_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-charttwo-year" style="height: 385px; width: 0px; display: block;" width="0" height="0" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_year_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chartthree-year" style="height: 385px; width: 0px; display: block;" width="0" height="0" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12">
+                      <div class="box box-success">
+                        <div class="box-header with-border">
+                          <i class="fa fa-bar-chart"></i>
+                          <h3 class="box-title"><%= @range_year_title %>と前年比</h3>
+                        </div>
+                        <div class="box-body">
+                          <canvas id="bar-chartfour-year" style="height: 385px; width: 0px; display: block;" width="0" height="0" class="chartjs-render-monitor"></canvas>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

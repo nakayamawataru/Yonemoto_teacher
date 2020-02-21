@@ -1,0 +1,56 @@
+<div class="box">
+  <div class="table-info-charts">
+    <div class="actions">
+      <div class="calendar">
+        <div class="text-date-filter">
+          <p class="text-date">
+            <%= I18n.l(@date_ranking, format: '%Y年%m月%d日(%A)') %>
+          </p>
+        </div>
+        <div class='input-group date' id='datepicker'>
+            <input type='text' class="form-control date-fillter" />
+            <span class="input-group-addon icon-date-fillter">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+      </div>
+
+      <div class="action-list">
+        <div class="rank-abs">
+          平均値: <%= (@index_rank && @rank_abs[@index_rank].presence) || '---' %>
+        </div>
+      <div class="action">
+        <button type="button" class="btn btn-default btn-sm previous-date">
+          <span class="glyphicon glyphicon-chevron-left"></span>
+        </button>
+        <button type="button" class="btn btn-default btn-sm next-date">
+          <span class="glyphicon glyphicon-chevron-right"></span>
+        </button>
+        </div>
+      </div>
+    </div>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th class="text-center">日付</th>
+          <th class="text-center">表示順位</th>
+          <th class="text-center">前日比</th>
+          <th class="text-center">キーワード</th>
+          <th class="text-center">検索住所</th>
+        </tr>
+      </thead>
+      <tbody class="data_chart-list">
+        <%= render 'data_chart', data_charts: @data_rankings, memos: @memos.to_a %>
+      </tbody>
+    </table>
+  </div>
+  <% if @business.present? %>
+    <button class="btn btn-success js-detail-memos">
+      <i class="fa fa-plus"></i>
+      <span>メモの追加</span>
+    </button>
+    <div id= "Modal-memos">
+      <%= render 'businesses/memo_modal', business: @business, date: @date_ranking %>
+    </div>
+  <% end %>
+</div>

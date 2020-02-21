@@ -1,0 +1,2 @@
+$(".data_chart-list").html("<%= j render('data_chart', data_charts: @data_charts) %>");
+$("#pagination").html("<%= j paginate(@data_charts, theme: 'twitter-bootstrap-3', remote: true).to_s %>")

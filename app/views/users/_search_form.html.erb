@@ -1,0 +1,29 @@
+<%= search_form_for @search, url: users_path, html: { method: :get } do |f| %>
+  <div class="col-md-12">
+    <div class="form-group col-md-<%= current_user.admin? ? 4 : 12 %> col-xs-12">
+      <label class="control-label">メールアドレス</label>
+      <%= f.text_field :email_cont, class: 'form-control' %>
+    </div>
+
+    <% if current_user.admin? %>
+      <div class="form-group col-md-4 col-xs-12">
+        <label class="control-label">ユーザー区分</label>
+        <%= f.select :role_eq, options_from_collection_for_select(User.roles.collect{|k, v| [v, role_as_text(k)]},
+          :first, :second, selected: params[:q].try(:[], :role_eq)), { include_blank: "選択する" }, { class: "form-control" } %>
+      </div>
+    <% end %>
+
+    <% if current_user.admin? %>
+      <div class="form-group col-md-4 col-xs-12">
+        <label class="control-label">クレカ決状況</label>
+        <%= select_tag :filter_payment,
+          options_for_select([["選択する", ""], [ "クレカ決済済み", "payment" ], [ "有効期限有り", "expire" ]], params[:filter_payment].to_s),
+          class: "form-control" %>
+      </div>
+    <% end %>
+
+    <div class="form-group col-md-12 col-sm-12 col-xs-12">
+      <%= submit_tag "検索", class: 'btn btn-success' %>
+    </div>
+  </div>
+<% end %>

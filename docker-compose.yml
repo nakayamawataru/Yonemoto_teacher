@@ -1,0 +1,36 @@
+version: '3.1'
+
+services:
+  db:
+    image: mysql:5.7
+    command: --character-set-server=utf8mb4
+    environment:
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: dbpass
+      MYSQL_ROOT_PASSWORD: dbpass
+      MYSQL_DATABASE: meo_tool_development
+    volumes:
+      - ./dump:/docker-entrypoint-initdb.d
+  web:
+    tty: true
+    stdin_open: true
+    command: sh /docker-entrypoint.sh
+    build: ./docker/web
+    links:
+      - db
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app:cached
+      - ./docker/web/wicked_pdf.rb:/app/config/initializers/wicked_pdf.rb
+      - bundle_caches:/app/vendor/bundle
+    environment:
+      HOST: localhost
+      PORT: 3000
+      DB_USER: root
+      DB_PASSWORD: dbpass
+      DB_HOST: db
+      DB_PORT: 3306
+      MAILER_SENDER_ADDRESS: noreply@example.com
+volumes:
+  bundle_caches:

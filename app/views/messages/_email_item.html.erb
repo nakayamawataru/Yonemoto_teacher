@@ -1,0 +1,23 @@
+<% emails.each do |email| %>
+  <tr>
+    <td class="text-center">
+      <div class="face-icon" style="background-image:url(<%= email.staff.image.try(:attached?) ? url_for(email.staff.image) : '' %>);"></div>
+      <p><%= email.staff.try(:staffname) %></p>
+    </td>
+    <td><%= email.customer_name %></td>
+    <td><%= email.email %></td>
+    <td class="text-center"><%= email.send_date.strftime('%Y/%m/%d %H:%M:%S') %></td>
+    <% if email.send_requested_at.present? && email.status == "requested" %>
+      <td class="text-center">
+        送信予約：
+        <br>
+        <%= email.send_requested_at.strftime('%Y/%m/%d %H:%M:%S') %>
+      </td>
+    <% else %>
+      <td class="text-center"><%= convert_message_status(email.status) %></td>
+    <% end %>
+    <td class="text-center">
+      <%= link_to '削除', message_path(email), data: { confirm: '本当に削除しますか？' }, method: :delete, class: 'btn btn-sm btn-default' %>
+    </td>
+  </tr>
+<% end %>

@@ -1,0 +1,19 @@
+<%= @words %>の口コミが投稿されました。
+<br>
+<br>
+投稿者：<%= @reviewer %>
+<br>
+投稿日時：<%= @create_time %>
+<br>
+<%= simple_format @content %>
+<br>
+<br>
+案件名：<%= @business.try(:name).to_s %>
+<br>
+<br>
+アカウント名：<%= @business&.user&.company.to_s %>
+<br>
+<br>
+<a href="<%= ENV.fetch('DOMAIN', 'http://localhost:3000') %>/reviews?business_id=<%= @business.try(:id).to_s %>
+"><%= ENV.fetch('DOMAIN', 'http://localhost:3000') %>/reviews?business_id=<%= @business.try(:id).to_s %>
+</a>

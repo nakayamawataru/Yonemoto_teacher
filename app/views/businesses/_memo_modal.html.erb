@@ -1,0 +1,31 @@
+<div id="memosModal" class="modal fade" role="dialog">
+  <%= form_for business, url: update_memo_business_path(business), method: :put do |f| %>
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>メモ <%= I18n.l(date, format: '%Y年%m月%d日') %></h4>
+        </div>
+        <div class="modal-body">
+          <div class="container-fluid">
+            <%= hidden_field_tag 'memo_date', date %>
+            <%= f.fields_for :memos, business.memos.accessible_by(current_ability).by_date(date) do |memo| %>
+              <%= render 'businesses/memo_fields', f: memo %>
+            <% end %>
+            <div class="row new-memo">
+              <div class="col-xs-offset-9 col-xs-3">
+                <%= link_to_add_association f, :memos,  render_options: { locals: { date: date } }, partial: 'businesses/memo_fields', 'data-association-insertion-node': '.new-memo' , class: 'btn btn-info' do %>
+                  <i class="fa fa-plus"></i>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <%= f.submit "保存", class:"btn btn-success"%>
+          <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

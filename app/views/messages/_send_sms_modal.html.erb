@@ -1,0 +1,175 @@
+<div id="send-sms-modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">口コミ促進機能</h4>
+      </div>
+      <div class="modal-body">
+        <ul class="nav nav-tabs">
+          <li class="active">
+            <a data-toggle="tab" href="#modal_sms" class="black-color">
+              <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+              <span>SMS送信</span>
+            </a>
+          </li>
+          <li>
+            <a data-toggle="tab" href="#modal_email" class="black-color">
+              <i class="fa fa-envelope-o"></i>
+              <span>Emailで送信</span>
+            </a>
+          </li>
+        </ul>
+
+        <div class="tab-content">
+          <div id="modal_sms" class="tab-pane fade in active">
+            <% if @business %>
+              <% if @business.setting_sms && @business.setting_sms.sms_patterns.present? %>
+                <p>
+                  <%= form_with model: @message, method: :post, remote: true do |f| %>
+                    <%= f.hidden_field :business_id, value: @business.try(:id) %>
+                    <%= f.hidden_field :message_type, value: :sms %>
+                    <div class="form-group">
+                      <label class="control-label">担当者名</label>
+                      <%= f.select :staff_id, options_from_collection_for_select(Staff.accessible_by(current_ability).is_display, 'id', 'staffname'), { include_blank: "選択する" }, class: "form-control" %>
+                    </div>
+                    <div class="form-group has-error-sms-staff" style="color: red;"></div>
+
+                    <div class="form-group">
+                      <label class="control-label">お客様名を記載</label>
+                      <%= f.text_field :customer_name, placeholder: 'お客様名を記載', class: 'form-control' %>
+                      <div class="form-group has-error-sms-customer_name" style="color: red;"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">連絡先を記載</label>
+                      <%= f.text_field :phone_number, placeholder: '連絡先を記載（例：0353278871）', class: 'form-control' %>
+                      <div class="form-group has-error-sms-phone_number" style="color: red;"></div>
+                    </div>
+
+                    <% if @business && @business.setting_sms %>
+                      <div class="form-group">
+                        <label class="control-label">パータン</label>
+                        <%= f.select :sms_pattern_id,
+                          options_from_collection_for_select(@business.setting_sms.sms_patterns, 'id', 'name'),
+                          { include_blank: "選択する" }, class: "form-control pattern-select", required: true %>
+                        <div class="form-group has-error-sms-sms_pattern" style="color: red;"></div>
+                      </div>
+                    <% end %>
+
+                    <div class="form-group content-message">
+                      <label for="content">内容</label>
+                      <textarea class="form-control pattern-content" rows="5" disabled>
+                      </textarea>
+                    </div>
+
+                    <div class="form-group has-error-phone_number">
+                      <label class="control-label">送信予定日時</label>
+                      <br>
+                      <small>
+                        ※　未入力の場合、即時送信されます。
+                        <br>
+                        ※　30分間隔での送信になります。
+                        <br>
+                      </small>
+                      <%= f.datetime_field :send_requested_at,
+                        :start_year => Time.now.year,
+                        :end_year => Time.now.year + 1,
+                        :minute_step => 30,
+                        class: 'form-control'
+                      %>
+                      <div class="form-group has-error-sms-send_requested_at" style="color: red;"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <%= f.submit 'SMS 送信', class: 'btn btn-success' %>
+                    </div>
+                  <% end %>
+                </p>
+              <% else %>
+                <a href="<%= setting_sms_path(business_id:@business.id, content_blank: true) %>" class="btn btn-success" >
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                  <span>SMS送信</span>
+                </a>
+              <% end %>
+            <% end %>
+          </div>
+          <div id="modal_email" class="tab-pane fade">
+            <% if @business %>
+              <% if @business.setting_sms && @business.setting_sms.email_patterns.present? %>
+                <p>
+                  <%= form_with model: @message, method: :post, remote: true do |f| %>
+                    <%= f.hidden_field :business_id, value: @business.try(:id) %>
+                    <%= f.hidden_field :message_type, value: :email %>
+                    <%= f.hidden_field :phone_number, value: '' %>
+                    <div class="form-group">
+                      <label class="control-label">担当者名</label>
+                      <%= f.select :staff_id, options_from_collection_for_select(Staff.accessible_by(current_ability).is_display, 'id', 'staffname'),
+                        { include_blank: "選択する" }, class: "form-control" %>
+                      <div class="form-group has-error-staff" style="color: red;"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">お客様名を記載</label>
+                      <%= f.text_field :customer_name, placeholder: 'お客様名を記載', class: 'form-control' %>
+                      <div class="form-group has-error-customer_name" style="color: red;"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">メールアドレス</label>
+                      <%= f.email_field :email, placeholder: '例）review@example.com', class: 'form-control' %>
+                      <div class="form-group has-error-email" style="color: red;"></div>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">パータン</label>
+                      <%= f.select :email_pattern_id,
+                        options_from_collection_for_select(@business.setting_sms.email_patterns, 'id', 'name'),
+                        { include_blank: "選択する" }, class: "form-control email-pattern-select", required: true %>
+                      <div class="form-group has-error-email_pattern" style="color: red;"></div>
+                    </div>
+
+                    <div class="form-group email-content-message">
+                      <label for="content">内容</label>
+                      <textarea class="form-control email-pattern-content" rows="5" disabled>
+                      </textarea>
+                    </div>
+
+                    <div class="form-group">
+                      <label class="control-label">送信予定日時</label>
+                      <br>
+                      <small>
+                        ※　未入力の場合、即時送信されます。
+                        <br>
+                        ※　30分間隔での送信になります。
+                        <br>
+                      </small>
+                      <%= f.datetime_field :send_requested_at,
+                        :start_year => Time.now.year,
+                        :end_year => Time.now.year + 1,
+                        :minute_step => 30,
+                        class: 'form-control'
+                      %>
+                      <div class="form-group has-error-send_requested_at" style="color: red;"></div>
+                    </div>
+                    <div class="form-group">
+                      <%= f.submit 'Email 送信', class: 'btn btn-success' %>
+                    </div>
+                  <% end %>
+                </p>
+              <% else %>
+                <a href="<%= setting_email_index_path(business_id:@business.id, content_blank: true) %>" class="btn btn-success" >
+                  <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                  <span>Email 送信</span>
+                </a>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+      </div>
+    </div>
+  </div>
+</div>

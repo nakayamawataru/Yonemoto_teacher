@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-ujs/1.2.2/rails.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+  </head>
+  <body>
+    <div class="reviews">
+      <div class="header-reviews">
+        <p class="business-name">
+          <%= @business.try(:name) %>
+        </p>
+         <p class="number-reviews">
+          （口コミ <%= @business ? @reviews.total_count : 0 %>件）
+        </p>
+      </div>
+      <div class="content-reviews">
+        <div class="review-list">
+          <%= render "review", reviews: @reviews %>
+        </div>
+        <div id="pagination">
+          <%= paginate @reviews, theme: 'twitter-bootstrap-3', remote: true, window: 0 %>
+        </div>
+      </div>
+      <div class="footer-reviews">
+        <div class="powered">
+          <span>powered by </span>
+          <% if url_logo_widget(@business).present? %>
+            <a href="<%= url_logo_widget @business %>" target="_blank">
+              <%= image_tag image_url(logo_widget @business), class: 'image-powered', alt: "Tryhatch" %>
+            </a>
+          <% else %>
+            <%= image_tag image_url(logo_widget @business), class: 'image-powered', alt: "Tryhatch" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <body>
+</html>
+
+<style>
+  .reviews {
+    width: 100%;
+    height: 100%;
+  }
+
+  .header-reviews {
+    height: 60px;
+    background-color: <%= color_widget @business %>;
+    text-align: center;
+  }
+
+  .content-reviews {
+    padding: 5px 0 5px 15px;
+    background-color: #fff;
+    overflow-y: scroll;
+  }
+
+  .footer-reviews {
+    min-height: 50px;
+    text-align: center;
+    background-color: #fff;
+    border-top: 1px solid #e9e9eb;
+  }
+
+  .content-review {
+    padding-bottom: 10px;
+  }
+
+  .date-review {
+    color: gray;
+  }
+
+  .star {
+    padding: 10px 0;
+  }
+
+  div.detail-review:not(:last-child)  {
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e9e9eb;
+  }
+
+  .review-by {
+    padding-bottom: 15px;
+  }
+
+  .pagination > .active > a {
+    background-color: #29B03D;
+    border-color: #29B03D;
+  }
+
+  .pagination > .active > a:hover {
+    background-color: #29B03D;
+    border-color: #29B03D;
+  }
+
+  .pagination > li > a {
+    color: #29B03D;
+  }
+
+  .gap {
+    display: none !important;
+  }
+
+  #pagination {
+    text-align: center;
+  }
+
+  .business-name {
+    font-weight: bold;
+    font-size: 16px;
+    padding-top: 5px;
+    color: #fff;
+    margin-bottom: 0;
+  }
+
+  .number-reviews {
+    font-weight: bold;
+    font-size: 18px;
+    color: #fff;
+    margin-bottom: 0;
+  }
+
+  .image-powered {
+    width: 100px;
+    margin: 10px 0px;
+  }
+
+  .powered {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 50px;
+  }
+
+  .powered > span {
+    font-size: 12px;
+    color: gray;
+    margin-top: 10px;
+  }
+
+  img {
+    margin-left: 10px !important;
+  }
+</style>
+
+<script>
+  const heightHeader = $('.header-reviews').height();
+  const heightFooter = $('.footer-reviews').height();
+  const heightContent = this.innerHeight - heightHeader - heightFooter;
+
+  $('.content-reviews').css('height', heightContent);
+</script>

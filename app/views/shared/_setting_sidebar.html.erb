@@ -1,0 +1,24 @@
+<div class="col-md-3 col-sm-3">
+  <div class="card list-group">
+    <%= link_to 'QRコード管理', setting_qr_index_path, class: "list-group-item #{'active' if controller_name == 'qr'}" %>
+    <%= link_to 'スタッフ管理', setting_staffs_path, class: "list-group-item #{'active' if controller_name == 'staffs'}" %>
+    <%= link_to 'SMSテキスト設定', setting_sms_path, class: "list-group-item #{'active' if controller_name == 'sms'}" %>
+    <%= link_to 'メールテキスト設定', setting_email_index_path, class: "list-group-item #{'active' if controller_name == 'email'}" %>
+    <% if can? :index, Setting::QaReviewsController %>
+      <%= link_to '口コミ質問&内容設定', setting_qa_reviews_path, class: "list-group-item #{'active' if controller_name == 'qa_reviews'}" %>
+    <% end %>
+    <%= link_to '目標管理', setting_goals_path, class: "list-group-item #{'active' if controller_name == 'goals'}" %>
+    <%= link_to 'キーワードレビュー管理', setting_keyword_reviews_path(word_type: current_user.admin? ? 'positive' : 'whitelist'),
+      class: "list-group-item #{'active' if controller_name == 'keyword_reviews' && params[:action] != 'whitelist' }" %>
+    <% if can? :index, Setting::WidgetsController %>
+      <%= link_to 'widgetコード', setting_widgets_path, class: "list-group-item #{'active' if controller_name == 'widgets'}" %>
+    <% end %>
+    <%= link_to '口コミ自動返信設定', setting_reply_reviews_path, class: "list-group-item #{'active' if controller_name == 'reply_reviews' && request.path != '/setting/batch/reply_reviews'}" %>
+    <% unless current_user.owner? %>
+      <%= link_to '口コミ自動返信設定（バッチ設定）', setting_batch_reply_reviews_path, class: "list-group-item #{'active' if request.path == '/setting/batch/reply_reviews'}" %>
+    <% end %>
+    <% if can? :manage, SesBlacklistEmail %>
+      <%= link_to 'バウンスメール設定', setting_ses_blacklist_emails_path, class: "list-group-item #{'active' if controller_name == 'ses_blacklist_emails'}" %>
+    <% end %>
+  </div>
+</div>

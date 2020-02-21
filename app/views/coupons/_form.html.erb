@@ -1,0 +1,39 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/coupon' %>
+<% end %>
+
+<%= f.hidden_field :business_id, value: @business.id %>
+<div class="form-group">
+  <%= f.label :limit_num, '利用制限' %>
+  <%= f.number_field :limit_num, class: "form-control", required: true %>
+  <% if params[:error] %>
+    <ul class='tm-validation-errors'>
+      <li class='tm-validation-error-message'>利用制限を入力してください</li>
+    </ul>
+  <% end %>
+</div>
+<div class="form-group">
+  <%= f.label :expire_at, '有効期限' %>
+  <%= f.text_field :expire_at, class: "form-control datetimepicker" %>
+</div>
+<div class="form-group">
+  <%= f.label :image, '画像' %>
+  <%= f.file_field :image, class: "form-control", onchange: "readURL(this);" %>
+  <% if f.object.image.try(:attached?) %>
+    <%= image_tag f.object.image, width: 'auto', height: 200, class: 'attached-image' %>
+  <% end %>
+  <img src="" id="img_prev">
+</div>
+<div class="form-group">
+  <%= f.label :description, '説明' %>
+  <%= f.text_area :description, rows: 3, class: "form-control" %>
+</div>
+<div class="form-group">
+  <%= f.label :message, 'SMSメッセージ' %>
+  <%= f.text_area :message, rows: 2, class: "form-control" %>
+</div>
+
+<div class="pull-right">
+  <%= link_to "キャンセル", coupons_path(business_id: @business.id), class:  "btn btn-default" %>
+  <%= f.submit "保存", class: "btn btn-success"%>
+</div>

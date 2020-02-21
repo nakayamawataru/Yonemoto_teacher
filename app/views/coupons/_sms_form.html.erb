@@ -1,0 +1,39 @@
+<%= content_for :additional_script do %>
+  <%= javascript_include_tag 'components/coupon' %>
+<% end %>
+<div>
+  <button class="btn btn-success send-coupons">
+    <i class="fa fa-paper-plane-o"></i>
+    <span>SMS送信</span>
+  </button>
+  <button type="button" class="btn btn-success" data-toggle="modal" data-target="#modalSmsForm">
+    <i class="fa fa-plus"></i>
+    <span>新規追加</span>
+  </button>
+</div>
+<br>
+<div class="table table-responsive">
+  <table class="table table-bordered table-hover">
+    <thead>
+      <tr role="row">
+        <th class="text-center">操作</th>
+        <th>氏名</th>
+        <th>電話番号</th>
+        <th>ステータス</th>
+        <th>クーポンURL</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody class="sms_review-list list-sms_reviews">
+      <%= render "sms_review_item", sms_reviews: @sms_reviews %>
+    </tbody>
+  </table>
+</div>
+<div id="page-entries-info">
+  <%= page_entries_info @sms_reviews, entry_name: '項目' %>
+</div>
+<div id="pagination">
+  <%= paginate @sms_reviews %>
+</div>
+
+<%= render 'form_sms_modal' %>

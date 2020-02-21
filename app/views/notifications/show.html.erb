@@ -1,0 +1,44 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">お知らせ詳細</h3>
+          <%= link_to edit_notification_path(@notification), class: "btn btn-success" do %>
+            <i class="fa fa-pencil"></i>
+          <% end %>
+        </div>
+        <div class="box-body">
+          <div class="table table-responsive">
+            <table class="table table-bordered table-hover tbl-show-post">
+              <tbody>
+                <tr role="row">
+                  <th style="width:20%;">本文</th>
+                  <td><%= simple_format @notification.content %></td>
+                </tr>
+                <tr role="row">
+                  <th>配信期間</th>
+                  <td><%= @notification.delivery_time %></td>
+                </tr>
+                <tr role="row">
+                  <th>ボタン</th>
+                  <td><%= link_to @notification.button_url, @notification.button_url, target: '_blank' %></td>
+                </tr>
+                <tr role="row">
+                  <th>表示対象</th>
+                  <td>
+                    <% if @notification.user_role.present? %>
+                      <% @notification.user_role.each do |role| %>
+                        <p><%= t "notifications.user_role.#{Notification::USER_ROLES.key(role.to_i)}" %></p>
+                      <% end %>
+                    <% end %>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

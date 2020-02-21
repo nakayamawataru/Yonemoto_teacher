@@ -1,0 +1,19 @@
+<div class="post-coupon <%= params[:error].present? ? params[:post_type] == 'coupon' ? '' : 'd-none' : @post.coupon? ? '' : 'd-none' %>">
+  <div class="form-group">
+    <%= f.label :coupon_code, 'クーポンコード' %>
+    <%= f.text_field :coupon_code, class: "form-control" %>
+  </div>
+  <div class="form-group">
+    <%= f.label :redeem_online_url, 'クーポン利用URL' %>
+    <%= f.text_field :redeem_online_url, class: "form-control" %>
+    <% if params[:error].try(:[], :redeem_online_url).present? %>
+      <ul class='tm-validation-errors'>
+        <li class='tm-validation-error-message'>クーポン利用URL<%= params[:error][:redeem_online_url].first %></li>
+      </ul>
+    <% end %>
+  </div>
+  <div class="form-group">
+    <%= f.label :terms_conditions, '利用規約' %>
+    <%= f.text_area :terms_conditions, rows: 3, class: "form-control" %>
+  </div>
+</div>

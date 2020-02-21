@@ -1,0 +1,32 @@
+<% if @cannot_send %>
+  $('body').append("<%= j render('shared/error_popup', message: I18n.t('sms.error.max_in_day', num: current_user.max_sms_in_day)).to_s %>")
+  $('#send-sms-modal').modal('hide');
+  $('#errorModal').modal('show');
+<% elsif @message.errors.present? %>
+  $('.tm-validation-errors').remove();
+  <% if @message.email? %>
+    $('.has-error-staff').empty();
+    $(".has-error-staff").append("<%= @message.errors.full_messages_for(:staff).first %>")
+    $('.has-error-customer_name').empty();
+    $(".has-error-customer_name").append("<%= @message.errors.full_messages_for(:customer_name).first %>")
+    $('.has-error-email').empty();
+    $(".has-error-email").append("<%= @message.errors.full_messages_for(:email).first %>")
+    $('.has-error-email_pattern').empty();
+    $(".has-error-email_pattern").append("<%= @message.errors.full_messages_for(:email_pattern_id).first %>")
+    $('.has-error-send_requested_at').empty();
+    $(".has-error-send_requested_at").append("<%= @message.errors.full_messages_for(:send_requested_at).first %>")
+  <% else %>
+    $('.has-error-sms-staff').empty();
+    $(".has-error-sms-staff").append("<%= @message.errors.full_messages_for(:staff).first %>")
+    $('.has-error-sms-customer_name').empty();
+    $(".has-error-sms-customer_name").append("<%= @message.errors.full_messages_for(:customer_name).first %>")
+    $('.has-error-sms-phone_number').empty();
+    $(".has-error-sms-phone_number").append("<%= @message.errors.full_messages_for(:phone_number).first %>")
+    $('.has-error-sms-sms_pattern').empty();
+    $(".has-error-sms-sms_pattern").append("<%= @message.errors.full_messages_for(:sms_pattern_id).first %>")
+    $('.has-error-sms-send_requested_at').empty();
+    $(".has-error-sms-send_requested_at").append("<%= @message.errors.full_messages_for(:send_requested_at).first %>")
+  <% end %>
+<% else %>
+  location.reload();
+<% end %>

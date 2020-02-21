@@ -1,0 +1,12 @@
+<div class="content-business-review">
+  <div class="logo-business-revivew">
+    <%= image_tag 'icon_gmail.png', class: 'gmail', alt: "Gmail" %>
+  </div>
+  <div class="question">
+    Gmailアドレスを持っていますか？
+  </div>
+  <div class="answer">
+    <%= link_to 'はい', questions_r_path(id: @business.bid, business_type: 'google'), class: "btn btn-primary btn-yes" %>
+    <%= link_to 'いいえ・不明', platforms_r_path(id: @business.bid, show_google: false), class: "btn btn-default btn-no" %>
+  </div>
+</div>

@@ -1,0 +1,23 @@
+<style>
+  <% background_color = parse_color %>
+
+  .skin-green .main-header .navbar {
+    background-color: <%= background_color[:main_color] %>;
+  }
+
+  .skin-green .main-header .logo {
+    background-color: <%= background_color[:header_color] %>;
+  }
+
+  .skin-green .sidebar-menu > li.active > a {
+    border-left-color: <%= background_color[:main_color] %>;
+  }
+
+  .skin-green .main-header .navbar .sidebar-toggle:hover {
+    background-color: <%= background_color[:hover_color] %>;
+  }
+
+  .skin-green .main-header .logo:hover {
+    background-color: <%= background_color[:hover_color] %>;
+  }
+</style>

@@ -1,0 +1,21 @@
+$(".review-list").html("<%= j render('review_item', reviews: @reviews) %>");
+$("#page-entries-info").html("<%= j (page_entries_info @reviews, entry_name: '項目') %>");
+$("#pagination").html("<%= j paginate(@reviews, theme: 'twitter-bootstrap-3', remote: true).to_s %>")
+
+$(".positive-reviews-list")
+  .html("<%= j render('keyword_review_item', keyword_reviews: @positive_reviews,
+                       word_type: :positive_keywords) %>");
+$("#pagination-positive-reviews")
+  .html("<%= j paginate(@positive_reviews, theme: 'twitter-bootstrap-3',
+                        remote: true, param_name: 'page_positive').to_s %>")
+
+$(".negative-reviews-list")
+  .html("<%= j render('keyword_review_item', keyword_reviews: @negative_reviews,
+                       word_type: :negative_keywords) %>");
+$("#pagination-negative-reviews")
+  .html("<%= j paginate(@negative_reviews, theme: 'twitter-bootstrap-3',
+                        remote: true, param_name: 'page_negative').to_s %>")
+
+$('.btn-popover').popover({
+  trigger: 'focus'
+})

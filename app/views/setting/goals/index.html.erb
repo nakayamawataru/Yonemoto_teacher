@@ -1,0 +1,36 @@
+<section class="content">
+  <div class="row">
+    <%= render 'shared/setting_sidebar' %>
+
+    <div class="col-md-9 col-sm-9">
+      <div class="box">
+        <div class="box-header">
+          <b>目標の設定</b>
+        </div>
+        <div class="box-body">
+          <%= form_tag setting_init_goal_path do  %>
+            <div class="form-group">
+              <small><label>1日に送信する口コミ依頼数</label></small>
+              <%= number_field_tag :sms_in_day, current_user.setting_goal.try(:sms_in_day), min: 0, class: 'form-control' %>
+            </div>
+            <hr>
+            <div class="form-group">
+              <small><label>1日のレビュー数</label></small>
+              <%= number_field_tag :review_in_day, current_user.setting_goal.try(:review_in_day), min: 0, class: 'form-control' %>
+            </div>
+            <hr>
+            <div class="form-group">
+              <small><label>定休日の設定</label></small>
+              <br>
+              <% SettingGoal::DAYNAMES.each_with_index do |value, index| %>
+                <%= check_box_tag 'holiday[]', index, current_user.setting_goal.try(:holiday).to_a.include?(index.to_s) %>
+                <label style="margin-right:10px;"><%= value %></label>
+              <% end %>
+            </div>
+            <%= submit_tag '保存', class: 'btn btn-success' %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

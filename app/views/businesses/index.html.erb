@@ -1,0 +1,62 @@
+<!-- <%= render 'content_header' %> -->
+
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">GMB検索</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="search-form row">
+            <%= render "search_form" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">GMB一覧</h3>
+          <%= link_to new_business_path, class: "btn btn-success" do %>
+            <i class="fa fa-plus"></i>
+            <span>登録</span>
+          <% end %>
+        </div>
+        <div class="box-body">
+          <div class="table table-responsive">
+            <table class="table table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th colspan="4" class="text-center">項目</th>
+                  <th class="text-center">ステータス</th>
+                  <% unless current_user.is_user? %>
+                    <th style="width: 180px">ユーザー</th>
+                  <% end %>
+                  <th class="text-center">案件名</th>
+                  <th class="text-center" style="min-width: 200px">検索住所</th>
+                  <th class="text-center" style="min-width: 100px">メインカテゴリ</th>
+                  <th class="text-center" style="min-width: 100px">他カテゴリ</th>
+                  <th class="text-center" style="min-width: 20px">GMB連携</th>
+                </tr>
+              </thead>
+
+              <tbody class="business-list">
+                <%= render "business_item", businesses: @businesses %>
+              </tbody>
+            </table>
+          </div>
+          <br>
+          <div id="page-entries-info">
+            <%= page_entries_info @businesses, entry_name: '項目' %>
+          </div>
+          <div id="pagination">
+            <%= paginate @businesses %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%= render "shared/notification_modal" %>

@@ -1,0 +1,12 @@
+<% lists.each do |list| %>
+  <tr>
+    <td><%= list[:name] %></td>
+    <% if type == "sms" %>
+      <td class="text-center"><%= list[:tell] %></td>
+    <% elsif type == "email" %>
+      <td class="text-center"><%= list[:email] %></td>
+    <% end %>
+    <td class="text-center"><%= list[:staff] %></td>
+    <td class="text-center"><%= list[:send_requested_at] %></td>
+  </tr>
+<% end %>

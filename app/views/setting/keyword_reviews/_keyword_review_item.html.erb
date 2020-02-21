@@ -1,0 +1,19 @@
+<% keyword_reviews.each do |keyword_review| %>
+  <tr>
+    <%= form_for [:setting, keyword_review], method: :put do |f| %>
+      <td><%= f.text_field :value, class: 'form-control' %></td>
+      <% if current_user.admin? %>
+        <td><%= f.select :word_type, options_for_select(KeywordReview.word_types.keys, f.object.word_type), {}, { class: 'form-control' } %></td>
+      <% else %>
+        <%= f.hidden_field :word_type, value: @word_type %>
+        <%= f.hidden_field :user_id, value: current_user.id %>
+      <% end %>
+      <td>
+        <%= f.submit '変更', class: "btn btn-success" %>
+        <%= link_to setting_keyword_review_path(keyword_review), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-success" do %>
+          <i class="fa fa-trash"></i>
+        <% end %>
+      </td>
+    <% end %>
+  </tr>
+<% end %>

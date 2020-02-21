@@ -1,0 +1,96 @@
+<% if users.present? %>
+  <% users.each do |user| %>
+    <tr>
+      <td><%= user.id %></td>
+      <% if current_user.admin? %>
+        <% if user.agent_id.present? %>
+          <td>
+            <%= link_to edit_user_path(id: user.agent_id) do %>
+              <%= user.agent.id %> - <%= user.agent.name %>
+            <% end %>
+          </td>
+        <% else %>
+          <td></td>
+        <% end %>
+      <% end %>
+      <td>
+        <%= user.company %>
+        <br>
+        <%= link_to "#{user.email}", edit_user_path(user) %>
+        <%# 決済機能  %>
+        <% if current_user.admin? %>
+          <% if plan = user.try!(:plan) %>
+            <% unless plan.try!(:name) == "tmp" %>
+              <br>
+              <br>
+              <div class="btn btn-sm btn-default">
+                <%= plan.try!(:name) %>
+              </div>
+            <% end %>
+          <% end %>
+
+          <% if message_plan = user.try!(:check_message_plan) %>
+            <br>
+            <br>
+            <div class="btn btn-sm btn-default">
+              <%= message_plan[0] %>
+            </div>
+          <% end %>
+        <% end %>
+      </td>
+      <% unless current_user.is_user? %>
+        <td><%= role_as_text(user.role) %></td>
+      <% end %>
+      <td>
+        <small>案件数</small>
+        <br>
+        <% if user.owner? %>
+          1
+        <% else %>
+          <%= number_with_delimiter user.managing_businesses.count %>
+        <% end %>
+        <br>
+        <br>
+        <small>キーワード数</small>
+        <br>
+        <%= number_with_delimiter user.keyword_count %>
+      </td>
+      <% if user.is_agent? %>
+        <td><%= user.users.count %></td>
+      <% else %>
+        <td></td>
+      <% end %>
+      <td><%= user.businesses.in_top_3 %></td>
+      <td>
+        <p>星カクトくん：  <%= (user.restricted ? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>').html_safe %></p>
+        <p>クーポン：  <%= (user.coupon_restricted ? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>').html_safe %></p>
+        <p>GMB：  <%= (user.gmb_restricted ? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>').html_safe %></p>
+        <p>口コミ手動返信：  <%= (user.manual_reply_reviews_restricted ? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>').html_safe %></p>
+        <p>口コミ自動返信：  <%= (user.auto_reply_reviews_restricted ? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>').html_safe %></p>
+        <p>投稿機能：  <%= (user.auto_post_restricted ? '<i class="fa fa-times"></i>' : '<i class="fa fa-check"></i>').html_safe %></p>
+      </td>
+      <td><%= user.expire_at.try(:strftime, '%Y年%m月%d日 %H:%M') %></td>
+      <td><%= user.max_sms_in_day %></td>
+      <td>
+        <%# 決済機能  %>
+        <% if (can? :index, PaymentsController) && user.payment_active? %>
+          <%= link_to payments_url(user_id: user.id), class: "btn btn-success" do %>
+            <i class="fa fa-credit-card"></i>
+          <% end %>
+        <% end %>
+
+        <%= link_to edit_user_path(user), class: "btn btn-success" do %>
+            <i class="fa fa-pencil"></i>
+        <% end %>
+        <% if can? :destroy, user %>
+          <%= link_to user_path(user), method: :delete, data: {confirm: "本当に削除しますか？"}, class: "btn btn-success" do %>
+            <i class="fa fa-trash"></i>
+          <% end %>
+        <% end %>
+        <p class="action-agent-name">代理人： <%= user.agent ? user.agent.name : '-' %></p>
+        <p>有効期限： <%= user.expire_at ? user.expire_at.try(:strftime, '%Y/%m/%d') : '-' %></p>
+        <p>送信上限数：  <%= user.max_sms_in_month ? user.max_sms_in_month : '-' %></p>
+      </td>
+    </tr>
+  <% end %>
+<% end %>

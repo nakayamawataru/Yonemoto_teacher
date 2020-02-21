@@ -1,0 +1,52 @@
+<% reviews.each do |review| %>
+  <tr>
+    <td style="text-align:center;" class='review-action-<%= review.id %>'>
+      <%= link_to review_path(review), class: 'btn btn-success' do %>
+        <i class="fa fa-search"></i>
+      <% end %>
+    </td>
+    <td><%= review.reviewer %></td>
+    <td><font color="#f39c12"><%= render_stars(review.star_rating) %></font></td>
+    <td>
+      <span class="btn-popover" data-toggle="popover" data-placement="left" tabindex="0" data-content="<%= review.content %>">
+        <%= review.content.present? ? 'あり' : '無し' %>
+      </span>
+      <p>投稿日時：<%= review.create_time.strftime('%Y-%m-%d %H:%M:%S') %></p>
+    </td>
+    <td>
+      <div class="span4 collapse-group text-reply-group">
+        <% if review.reply_content.present? %>
+          <div class="text-reply-review text-reply-review-<%= review.id %>">
+            <span class="btn-popover" data-toggle="popover" data-placement="left" tabindex="0" data-content="<%= review.reply_content %>">
+              あり
+            </span>
+            <% if review.reply_update_time.present? %>
+              <p>返信日時：<%= review.reply_update_time.strftime('%Y-%m-%d %H:%M:%S') %></p>
+            <% end %>
+          </div>
+        <% else %>
+          <div class="text-reply-review text-reply-review-<%= review.id %>">
+            無し
+          </div>
+        <% end %>
+        <% if !current_user.manual_reply_reviews_restricted %>
+          <div class='reply-review-action reply-review-action-<%= review.id %>'>
+            <% if review.reply_content.present? %>
+              <div class="remove-reply-review">
+                <%= link_to "#", class: 'btn btn-success btn-remove-reply', data: { id: review.id, 'business-id': @business.id } do %>
+                  <i class="fa fa-trash-o"></i>
+                <% end %>
+              </div>
+            <% end %>
+            <div class="reply-review">
+              <%= link_to "#", class: 'btn btn-success btn-reply btn-reply-' + review.id.to_s,
+                data: { toggle: :modal, target: '#reply_review_modal', id: review.id, 'review-content': review.content, 'reply-comment': review.reply_content } do %>
+                <i class="fa fa-reply"></i>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </td>
+  </tr>
+<% end %>

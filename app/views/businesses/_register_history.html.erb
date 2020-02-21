@@ -1,0 +1,9 @@
+<div class="form-group">
+  <label><small>最終GMB連携日</small></label>
+  <input class="form-control" disabled="disabled" type="text" value="<%= f.object.try(:last_connected_at).try(:strftime, "%Y/%m/%d - %H:%M:%S") %>">
+</div>
+
+<div class="form-group">
+  <label><small>連携メールアドレス</small></label>
+  <input class="form-control" disabled="disabled" type="text" value="<%= f.object.try(:gmail) %>">
+</div>

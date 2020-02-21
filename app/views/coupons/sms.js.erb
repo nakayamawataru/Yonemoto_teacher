@@ -1,0 +1,13 @@
+<% if @data_precence %>
+  <% unless @failed_phone_nums.present? %>
+    location.reload();
+  <% else %>
+    $('#errorModal').remove();
+    $('body').append("<%= j render 'shared/error_popup', message: ('これらの電話番号にSMSを送信することはできません：' + @failed_phone_nums.join('、')) %>")
+    $('#errorModal').modal('show');
+  <% end %>
+<% else %>
+  $('#errorModal').remove();
+  $('body').append("<%= j render 'shared/error_popup', message: 'ユーザーを選択してください。' %>")
+  $('#errorModal').modal('show');
+<% end %>

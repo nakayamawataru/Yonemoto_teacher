@@ -1,0 +1,11 @@
+$(".message-list").html("<%= j render('message_item', messages: @smses) %>");
+$("#page-entries-info").html("<%= j (page_entries_info @smses, entry_name: '項目') %>");
+$("#pagination").html("<%= j paginate(@smses, theme: 'twitter-bootstrap-3', remote: true, :param_name => 'sms_page').to_s %>")
+
+$(".email-list").html("<%= j render('email_item', emails: @emails) %>");
+$("#page-entries-info-email").html("<%= j (page_entries_info @emails, entry_name: '項目') %>");
+$("#pagination-email").html("<%= j paginate(@emails, theme: 'twitter-bootstrap-3', remote: true, :param_name => 'email_page').to_s %>")
+
+$(".staff-info-list").html("<%= j render('staff_info_item', staffs: @staffs) %>");
+$(".staffs-select-month").html("<%= j render('select_month') %>");
+

@@ -1,0 +1,94 @@
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">投稿詳細</h3>
+        </div>
+        <div class="box-body">
+          <div class="table table-responsive">
+            <table class="table table-bordered table-hover tbl-show-post">
+              <tbody>
+                <tr role="row">
+                  <th>案件名</th>
+                  <td><%= @business.name %></td>
+                </tr>
+                <tr role="row">
+                  <th>投稿種類</th>
+                  <td><%= post_type_as_text(@post.post_type) %></td>
+                </tr>
+                <tr role="row">
+                  <th>投稿内容</th>
+                  <td><%= simple_format @post.summary %></td>
+                </tr>
+                <tr role="row">
+                  <th>画像</th>
+                  <td class="post-image-show"><%= image_tag @post.image_url.to_s %></td>
+                </tr>
+                <tr role="row">
+                  <th>予約投稿</th>
+                  <td>
+                    <% if @post.auto_post %>
+                      <i class="fa fa-check"></i>
+                    <% else %>
+                      <i class="fa fa-times"></i>
+                    <% end %>
+                  </th>
+                </tr>
+                <tr role="row">
+                  <th>予約投稿日時</th>
+                  <td><%= @post.time_post ? @post.time_post.strftime('%Y/%m/%d %H:%M') : '' %></td>
+                </tr>
+                <% unless @post.what_news? %>
+                  <tr role="row">
+                    <th>イベントタイトル</th>
+                    <td><%= @post.title %></td>
+                  </tr>
+                  <tr role="row">
+                    <th>開始日時</th>
+                    <td><%= @post.start_date ? @post.start_date.strftime('%Y/%m/%d %H:%M:%S') : '' %></td>
+                  </tr>
+                  <tr role="row">
+                    <th>終了日時</th>
+                    <td><%= @post.end_date ? @post.end_date.strftime('%Y/%m/%d %H:%M:%S') : '' %></td>
+                  </tr>
+                <% end %>
+                <% unless @post.coupon? %>
+                    <tr role="row">
+                      <th>ボタンの追加（省略可）</th>
+                      <td><%= action_type_as_text @post.action_type %></td>
+                    </tr>
+                  <% if @post.action_type == 'CALL' %>
+                    <tr role="row">
+                      <th>電話番号</th>
+                      <td><%= @post.action_phone_number %></td>
+                    </tr>
+                  <% elsif @post.action_type != nil %>
+                    <tr role="row">
+                      <th>ボタンのリンク</th>
+                      <td><%= @post.action_url %></td>
+                    </tr>
+                  <% end %>
+                <% end %>
+                <% if @post.coupon? %>
+                  <tr role="row">
+                    <th>クーポンコード</th>
+                    <td><%= @post.coupon_code %></td>
+                  </tr>
+                  <tr role="row">
+                    <th>クーポン利用URL</th>
+                    <td><%= @post.redeem_online_url %></td>
+                  </tr>
+                  <tr role="row">
+                    <th>利用規約</th>
+                    <td><%= simple_format @post.terms_conditions %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

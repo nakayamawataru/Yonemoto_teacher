@@ -1,0 +1,11 @@
+<p>本日、順位が急降下しました。以下から確認をお願いします。</p>
+<% url = ENV['DOMAIN'] + '/charts?business_id=' +
+  @meo_history.business_id.to_s + '&date_ranking=' +
+  @meo_history.date.strftime('%Y-%m-%d') %>
+<%= link_to url, url, target: '_blank' %>
+<p>キーワード：<%= @meo_history.keyword.value %></p>
+<p>前日：</p>
+<b><%= @meo_history.meo_previous&.rank %></b>
+<p>↓</p>
+<p>本日：</p>
+<b><%= @meo_history.rank %></b>

@@ -1,0 +1,54 @@
+<div class="content-business-review">
+  <div class="question">
+    どちらをお持ちですか？
+  </div>
+  <div class="answer">
+    <% if @business.try(:map_url).present? && params[:show_google] != 'false' %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'google'), class: "btn-pf btn-pf-google" do %>
+        <%= image_tag 'icon_google.svg', alt: "Google" %>
+      <% end %>
+      <small>（アカウントをお持ちの方）</small>
+    <% end %>
+
+    <% if @business.try(:yahoo_place_url).present? %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'yahoo'), class: "btn-pf btn-pf-yahoo" do %>
+        <%= image_tag 'icon_yahoo.png', alt: "Yahoo" %>
+      <% end %>
+      <small>（アカウントをお持ちの方）</small>
+    <% end %>
+
+    <% if @business.try(:ekiten_url).present? %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'ekiten'), class: "btn-pf btn-pf-ekiten" do %>
+        <%= image_tag 'icon_ekiten.png', alt: "Ekiten" %>
+      <% end %>
+    <% end %>
+
+    <% if @business.try(:facebook_url).present? %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'facebook'), class: "btn-pf btn-pf-facebook" do %>
+        <%= image_tag 'icon_facebook.png', alt: "Facebook" %>
+      <% end %>
+    <% end %>
+
+    <% if @business.try(:instagram_url).present? %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'instagram'), class: "btn-pf btn-pf-instagram" do %>
+        <%= image_tag 'icon_instagram.png', alt: "Instagram" %>
+      <% end %>
+    <% end %>
+
+    <% if @business.try(:hotpepper_url).present? %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'hotpepper'), class: "btn-pf btn-pf-hotpepper" do %>
+        <%= image_tag 'icon_hotpepper.png', alt: "Instagram" %>
+      <% end %>
+    <% end %>
+
+    <% if @business.try(:e_park_url).present? %>
+      <%= link_to questions_r_path(id: @business.bid, business_type: 'e-park'), class: "btn-pf btn-pf-e_park" do %>
+        <%= image_tag 'icon_e_park.png', alt: "Instagram" %>
+      <% end %>
+    <% end %>
+
+    <% if @business.try(:default_review_url).present? %>
+      <%= link_to 'どちらも持っていない', @business.try(:default_review_url), class: "btn btn-default btn-no" %>
+    <% end %>
+  </div>
+</div>

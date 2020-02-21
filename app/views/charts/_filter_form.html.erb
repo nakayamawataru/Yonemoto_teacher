@@ -1,0 +1,18 @@
+<div class="col-md-12">
+  <div class="form-group col-md-4 col-xs-12">
+    <label class="control-label">年月</label>
+    <%= select_tag :month, options_from_collection_for_select(months_views_meo_data(@business), :first, :second, params[:month]), include_blank: "選択する", class: "form-control chart-select" %>
+  </div>
+
+  <div class="form-group col-md-4 col-xs-12">
+    <label class="control-label">日数</label>
+    <%= select_tag :day_number, options_for_select(@day_number, params[:day_number]), include_blank: "選択する", class: "form-control chart-select" %>
+  </div>
+
+  <div class="form-group col-md-4 col-xs-12">
+    <label class="control-label">順位以内指定</label>
+    <%= select_tag :within_rank,
+      options_from_collection_for_select((1..20).map{|n| [n, n.to_s + '位以内'] }.unshift(['all', 'すべて']), :first, :second, @within_rank),
+      class: "form-control chart-select"  %>
+  </div>
+</div>

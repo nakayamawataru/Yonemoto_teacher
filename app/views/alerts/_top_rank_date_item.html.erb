@@ -1,0 +1,14 @@
+<% top_rank_list.each do |item| %>
+  <tr>
+    <td><%= item.date.strftime('%d-%m-%Y') %></td>
+    <td><%= item.business.name %></td>
+    <td><%= item.keyword.value %></td>
+    <td><%= item.meo_previous&.rank %></td>
+    <td><%= item.rank %></td>
+    <td>
+      <%= link_to charts_path(business_id: item.business.id, month: item.date.strftime('%Y/%m'), date_ranking: item.date.strftime('%Y/%m/%d')), class: "btn btn-success" do %>
+        <i class="fa fa-line-chart"></i>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

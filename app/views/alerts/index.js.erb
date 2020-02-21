@@ -1,0 +1,19 @@
+<% if params[:type] == 'out_rank' || params[:type].nil?%>
+  $(".out-rank-list").html("<%= j render('out_rank_item', out_rank_list: @out_rank_list) %>")
+  $(".out-rank-select-date").html("<%= j render('select_date') %>")
+  $("#pagination_out_rank").html("<%= j paginate(@out_rank_list, param_name: :page_out_rank, params: { type: 'out_rank'}, theme: 'twitter-bootstrap-3', remote: true).to_s %>")
+  document.initAlertOutRankCalenderPicker()
+<% end %>
+
+<% if params[:type] == 'top_rank' || params[:type].nil? %>
+  $(".top-rank-list").html("<%= j render('top_rank_date_item', top_rank_list: @top_rank_list) %>")
+  $(".top-rank-select-month").html("<%= j render('select_date_top_rank') %>")
+  $("#pagination").html("<%= j paginate(@top_rank_list, param_name: :page_top_rank, params: { type: 'top_rank'}, theme: 'twitter-bootstrap-3', remote: true).to_s %>")
+  document.initAlertTopRankCalenderPicker()
+<% end %>
+
+$(".page, .first, .prev, .next_page, .last").on('click', function() {
+  $('.modal-loading').show()
+})
+
+$('.modal-loading').hide()

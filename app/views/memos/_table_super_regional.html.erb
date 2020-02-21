@@ -1,0 +1,25 @@
+<table class="table table-bordered table-striped">
+  <thead>
+    <tr>
+      <th class="text-center col-md-2">日付</th>
+      <th class="text-center">Content</th>
+    </tr>
+  </thead>
+
+  <tbody class="memo-list">
+    <% @memos.each do |memo| %>
+    <tr>
+      <td class="text-center"><%= memo[0] %></td>
+      <td>
+        <% memo[1].each do |m| %>
+          <% if m.user == current_user %>
+            <p><%= "- #{m.title}" %></p>
+          <% else %>
+            <p><%= "- #{m.title} （#{m.user.company}）" %></p>
+          <% end %>
+        <% end %>
+      </td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

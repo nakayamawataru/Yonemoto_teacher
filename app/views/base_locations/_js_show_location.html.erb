@@ -1,0 +1,39 @@
+// Refs: https://gist.github.com/kaugesaar/5e8d58564bd6ffb813ed
+
+var GeoSearch = function() {
+  this.baseUrl = 'https://www.google.co.jp/search?';
+  this.lang = 'JA';
+  this.glp = 1;
+  this.adtest = 'on';
+
+  var key = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
+
+  var makeHash = function(loc) {
+    loc = unescape(encodeURIComponent(loc));
+    return 'w+CAIQICI' + key[loc.length%key.length] + btoa(loc).replace(/\=/g,'').trim();
+  };
+
+  this.build = function(input) {
+    var hash = makeHash(input.location);
+    var params = {
+      q : encodeURIComponent(input.query),
+      uule: hash
+    };
+
+    if (this.lang) params.hl = this.lang;
+    if (this.glp) params.glp = this.glp;
+    if (this.adtest) params.adtest = this.adtest;
+
+    var urlParams = Object.keys(params).map(function(k) {
+      return k + "=" + params[k];
+    }).join('&');
+
+    return this.baseUrl + urlParams;
+  };
+}
+
+var geo = new GeoSearch();
+var url = geo.build({query: "<%= @keyword %>",
+  location: "<%= @base_location.base_address_english.present? ?
+  @base_location.base_address_english : @base_location.base_address %>"});
+  

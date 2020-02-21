@@ -1,0 +1,63 @@
+<!-- <%= render 'content_header' %> -->
+
+<!-- Main content -->
+<section class="content">
+  <div class="row">
+    <div class="col-xs-12">
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">ユーザー検索</h3>
+        </div>
+
+        <div class="box-body">
+          <div class="search-form row">
+            <%= render "search_form" %>
+          </div>
+        </div>
+      </div>
+
+      <div class="box">
+        <div class="box-header">
+          <h3 class="box-title">ユーザー一覧</h3>
+          <%= link_to new_user_path, class: "btn btn-success" do %>
+            <i class="fa fa-plus"></i>
+            <span>登録</span>
+          <% end %>
+        </div>
+        <div class="box-body">
+          <table id="example1" class="table table-bordered table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <% if current_user.admin? %>
+                  <th>代理人</th>
+                <% end %>
+                <th class="col-xs-1">会社</th>
+                <% unless current_user.is_user?  %>
+                  <th>役割</th>
+                <% end %>
+                <th></th>
+                <th>契約店舗数</th>
+                <th>3位以内の店舗数</th>
+                <th>機能開放</th>
+                <th>有効期限</th>
+                <th>送信上限数</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody class="user-list">
+              <%= render "user_item", users: @users %>
+            </tbody>
+          </table>
+          <br>
+          <div id="page-entries-info">
+            <%= page_entries_info @users, entry_name: '項目' %>
+          </div>
+          <div id="pagination">
+            <%= paginate @users %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
